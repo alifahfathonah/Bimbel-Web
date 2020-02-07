@@ -8,7 +8,7 @@
     </div>
     </a>
 
-    @foreach (config('sitevars.student_sidebar') as $heading)
+    @foreach (config('sidebars.student_sidebar') as $heading)
 
         @if (count($heading['items']) > 0)
             <!-- Heading -->
