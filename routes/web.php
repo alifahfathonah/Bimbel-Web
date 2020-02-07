@@ -18,3 +18,14 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['prefix' => 'tryout'], function () {
+    Route::group(['middleware' => 'guest'], function () {
+        Route::get('/login', 'Tryout\AuthController@loginForm')->name('tryout.login');
+        Route::post('/login', 'Tryout\AuthController@login')->name('tryout.post_login');
+    });
+
+    Route::group(['middleware' => ['student']], function () {
+        Route::view('/dashboard', 'tryout\dashboard')->name('tryout.dashboard');
+        Route::get('/logout', 'Tryout\AuthController@logout')->name('tryout.logout');
+    });
+});
