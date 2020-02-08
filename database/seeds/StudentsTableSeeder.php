@@ -14,8 +14,8 @@ class StudentsTableSeeder extends Seeder
         $password = bcrypt('admin');
 
         DB::insert("INSERT INTO `students`
-            (`id`, `username`, `password`, `password_enable`, `created_at`, `updated_at`) VALUES
-            ('1',  'agus', '$password', '1', '2019-12-28 13:25:30', NULL);
+            (`id`, `name`, `username`, `password`, `password_enable`, `created_at`, `updated_at`) VALUES
+            ('1',  'Admin', 'admin', '$password', '1', '2019-12-28 13:25:30', NULL);
         ");
     }
 

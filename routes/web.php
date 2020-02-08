@@ -11,6 +11,8 @@
 |
 */
 
+use App\Http\Controllers\Tryout\CourseController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -19,13 +21,15 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['prefix' => 'tryout'], function () {
-    Route::group(['middleware' => 'guest'], function () {
-        Route::get('/login', 'Tryout\AuthController@loginForm')->name('tryout.login');
-        Route::post('/login', 'Tryout\AuthController@login')->name('tryout.post_login');
-    });
+    Route::get('/login', 'Tryout\AuthController@loginForm')->name('tryout.login');
+    Route::post('/login', 'Tryout\AuthController@login')->name('tryout.post_login');
 
     Route::group(['middleware' => ['student']], function () {
-        Route::view('/dashboard', 'tryout\dashboard')->name('tryout.dashboard');
+        Route::get('/dashboard', 'Tryout\TryoutController@dashboard')->name('tryout.dashboard');
+
+        Route::get('/level/{id}', 'Tryout\TryoutController@level_index')->name('tryout.level.index');
+        Route::get('/course', 'Tryout\TryoutController@course_index')->name('tryout.course.index');
+
         Route::get('/logout', 'Tryout\AuthController@logout')->name('tryout.logout');
     });
 });

@@ -22,7 +22,7 @@
             @foreach ($heading['items'] as $item)
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item">
-                    <a class="nav-link py-2" href="{{ $item['route'] }}">
+                    <a class="nav-link py-2" href="{{ url($item['url']) }}">
                         <i class="{{ $item['icon'] }}"></i>
                         <span>{{ $item['title'] }}</span>
                     </a>

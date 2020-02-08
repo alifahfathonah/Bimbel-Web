@@ -6,8 +6,18 @@ return [
             'items' => [
                 [
                     'title' => 'Dashboard',
-                    'route' => 'dashboard',
+                    'url' => 'tryout/dashboard',
                     'icon' => 'fas fa-fw fa-tachometer-alt',
+                ],
+            ],
+        ],
+        [
+            'title' => 'Course',
+            'items' => [
+                [
+                    'title' => 'Course',
+                    'url' => 'tryout/course',
+                    'icon' => 'fab fa-fw fa-leanpub',
                 ],
             ],
         ],
@@ -16,17 +26,17 @@ return [
             'items'=> [
                 [
                     'title' => 'Profile',
-                    'route' => 'user/profile',
+                    'url' => 'user/profile',
                     'icon' => 'fas fa-fw fa-user'
                 ],
                 [
                     'title' => 'Change Password',
-                    'route' => 'user/changepassword',
+                    'url' => 'user/changepassword',
                     'icon' => 'fas fa-fw fa-key'
                 ],
                 [
                     'title' => 'Logout',
-                    'route' => 'user/logout',
+                    'url' => 'user/logout',
                     'icon' => 'fas fa-fw fa-sign-out-alt'
                 ],
             ]
