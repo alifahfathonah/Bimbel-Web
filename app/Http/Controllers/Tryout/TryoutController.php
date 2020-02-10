@@ -28,6 +28,12 @@ class TryoutController extends Controller
         return view('tryout.course', compact('courses'));
     }
 
+    public function profile()
+    {
+        $user = auth()->guard('student')->user();
+        return view('tryout.student.profile', compact('user'));
+    }
+
     public function level_index($id)
     {
         $student_id = auth()->guard('student')->user()->id;

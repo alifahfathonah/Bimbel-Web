@@ -31,6 +31,9 @@ Route::group(['prefix' => 'tryout'], function () {
 
         Route::get('/level/{id}', 'Tryout\TryoutController@level_index')->name('tryout.level.index');
         Route::get('/course', 'Tryout\TryoutController@course_index')->name('tryout.course.index');
+
+        Route::get('/profile', 'Tryout\TryoutController@profile')->name('tryout.account.profile');
+
         Route::get('/mark', 'Tryout\ExamController@mark_question')->name('tryout.exam.mark');
         Route::get('/exam', 'Tryout\ExamController@show_exam')->name('tryout.exam');
         Route::post('/exam', 'Tryout\ExamController@start_exam')->name('tryout.exam.start');

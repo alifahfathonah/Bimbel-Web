@@ -26,17 +26,17 @@ return [
             'items'=> [
                 [
                     'title' => 'Profile',
-                    'url' => 'user/profile',
+                    'url' => 'tryout/profile',
                     'icon' => 'fas fa-fw fa-user'
                 ],
                 [
                     'title' => 'Change Password',
-                    'url' => 'user/changepassword',
+                    'url' => 'tryout/changepassword',
                     'icon' => 'fas fa-fw fa-key'
                 ],
                 [
                     'title' => 'Logout',
-                    'url' => 'user/logout',
+                    'url' => 'tryout/logout',
                     'icon' => 'fas fa-fw fa-sign-out-alt'
                 ],
             ]
