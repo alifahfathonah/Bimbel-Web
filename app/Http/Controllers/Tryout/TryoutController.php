@@ -12,6 +12,7 @@ use App\Models\MultipleChoiceAnswer;
 use App\Models\Question;
 use App\Models\Report;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class TryoutController extends Controller
@@ -29,190 +30,48 @@ class TryoutController extends Controller
 
     public function level_index($id)
     {
+        $student_id = auth()->guard('student')->user()->id;
+        $sublevels = DB::table('course_sublevels')
+                        ->where('course_level_id', $id)
+                        ->leftJoin('reports', function ($join) use ($student_id){
+                            $join->on('reports.course_sublevel_id', '=', 'course_sublevels.id')
+                                 ->where('reports.student_id', '=', $student_id);
+                        })
+                        ->select(
+                            'course_sublevels.id',
+                            'course_sublevels.course_level_id',
+                            'course_sublevels.title',
+                            'course_sublevels.time',
+                            'course_sublevels.minimum_score',
+                            'course_sublevels.descrption',
+                            'reports.id AS report_id',
+                            'reports.student_id',
+                            'reports.course_sublevel_id',
+                            'reports.score',
+                            'reports.status',
+                            'reports.finish_time',
+                            'reports.created_at',
+                        )
+                        ->get()
+                        ->toArray();
+        // dd($sublevels);
+        return view('tryout.level', compact('sublevels'));
+
+
+        dd($sublevels);
         $sublevels = CourseSublevel::where('course_level_id', '=', $id)->get();
+
+        $sublevel_ids = array();
+        foreach ($sublevels as $sublevel) {
+            array_push($sublevel_ids, $sublevel['id']);
+        }
+
+
+        $reports = Report::where('student_id', $student_id)
+                    ->whereIn('id', $sublevel_ids)
+                    ->get();
+
+
         return view('tryout.level', compact('sublevels'));
     }
-
-    public function show_question(Request $request)
-    {
-        $this->validate($request, [
-            'sublevel_id' => 'required|exists:course_sublevels,id',
-        ]);
-    }
-
-    public function start_exam(Request $request)
-    {
-        $this->validate($request, [
-            'sublevel_id' => 'required|exists:course_sublevels,id',
-        ]);
-
-        $report = $this->_createReports($request['sublevel_id']);
-        $sublevel = CourseSublevel::where('id', $request['sublevel_id'])->first();
-
-        return $this->_show_exam($report, $sublevel);
-    }
-
-    public function show_exam(Request $request)
-    {
-        $this->validate($request, [
-            'report_id' => 'required|exists:reports,id',
-        ]);
-
-        $report_id = $request['report_id'];
-        $report = Report::where('id', $report_id)->first();
-
-        $sublevel_id = $report['course_sublevel_id'];
-        $sublevel = CourseSublevel::where('id', $sublevel_id)->first();
-
-        $this->validate($request, [
-            'number' => ['required',
-                Rule::exists('questions', 'number')
-                    ->where(function ($query) use ($sublevel_id) {
-                        $query->where('course_sublevel_id', $sublevel_id);
-                    }),
-            ]
-        ]);
-
-        return $this->_show_exam($report, $sublevel, $request['number']);
-
-    }
-
-    public function mark_question(Request $request)
-    {
-        $this->validate($request, [
-            'report_id' => 'required|exists:reports,id',
-        ]);
-
-        $report = Report::where('id', $request['report_id'])->first();
-        $sublevel_id = $report->course_sublevel_id;
-
-        $this->validate($request, [
-            'mark_number' => [
-                'required',
-                Rule::exists('questions', 'number')
-                    ->where(function ($query) use ($sublevel_id) {
-                        $query->where('course_sublevel_id', $sublevel_id);
-                    }),
-            ]
-        ]);
-        $mark = MarkedQuestion::where('report_id', $request['report_id'])
-                    ->where('number', $request['mark_number'])
-                    ->first();
-        if (!$mark){
-            $mark = new MarkedQuestion;
-            $mark->report_id = $report->id;
-            $mark->number = $request['mark_number'];
-            $mark->save();
-        } else {
-            $mark->delete();
-        }
-
-        return redirect()->back();
-    }
-
-    private function _show_exam($report, $sublevel, $number = 1)
-    {
-        $report_id = $report->id;
-        $sublevel_id = $sublevel->id;
-        if (
-            !$this->_isExamAvailalable($report, $sublevel) ||
-            !$this->_isAuthorizedUser($report)
-        ) {
-            return response('Forbidden', $status = 403);
-        }
-
-        $course_title = $this->_get_course_title($sublevel['course_level_id']);
-
-        $current_number = $number;
-        $remaining_time = $this->_get_remaning_time($report, $sublevel);
-
-        $question_numbers = $this->_get_question_numbers($sublevel_id, $report_id);
-        // dd($question_numbers);
-        $question = $this->_get_question($sublevel_id, $current_number);
-        $question['answers'] = $this->_get_answers($question->id);
-
-        $next_available = ($current_number < $question_numbers->count())  ? '' : 'disabled';
-        $prev_available = ($current_number > 1) ? '' : 'disabled';
-
-        return view('tryout.questions', compact([
-            'sublevel',
-            'course_title',
-            'current_number',
-            'question_numbers',
-            'question',
-            'remaining_time',
-            'next_available',
-            'prev_available',
-            'report_id'
-        ]));
-    }
-
-    private function _createReports($sublevel_id)
-    {
-        $report = new Report;
-        $report->student_id = auth()->guard('student')->user()->id;
-        $report->course_sublevel_id = $sublevel_id;
-        $report->score = 0.0;
-        $report->status = 1;
-        $report->finish_time = null;
-        $report->save();
-
-        return $report;
-    }
-
-    private function _get_course_title($level_id)
-    {
-        $level = CourseLevel::where('id', $level_id)->first();
-        $course = Course::where('id', $level['course_id'])->first();
-        return $course['title'] . ' - ' . $level['title'];
-    }
-
-    private function _get_remaning_time($report, $sublevel)
-    {
-        $remaining_time = new Carbon($report['created_at']);
-        $remaining_time = $remaining_time->addMinute($sublevel['time']);
-        $remaining_time = new Carbon($remaining_time->diffInSeconds(Carbon::now()));
-
-        return $remaining_time;
-    }
-
-    private function _isAuthorizedUser($report)
-    {
-        return $report['student_id'] == auth()->guard('student')->user()->id;
-    }
-
-    private function _isExamAvailalable($report, $sublevel)
-    {
-        $time = $sublevel['time'];
-
-        $time_start = new Carbon($report['created_at']);
-        $time_start->addMinutes($time);
-
-        return $time_start > Carbon::now() && $report['status'] == 1;
-    }
-
-    private function _get_question($sublevel_id, $number)
-    {
-        return Question::where('course_sublevel_id', '=', $sublevel_id)
-                ->where('number', $number)
-                ->first();
-    }
-
-    private function _get_answers($question_id)
-    {
-        return MultipleChoiceAnswer::where('question_id', '=', $question_id)
-                ->orderBy('answer_order')
-                ->get();
-    }
-
-    private function _get_question_numbers($sublevel_id, $report_id)
-    {
-        return Question::where('course_sublevel_id', $sublevel_id)
-                ->with(['marked' => function ($query) use($report_id) {
-                    $query->where('report_id', $report_id);
-                }])
-                ->orderBy('number')
-                ->get(['id','number']);
-    }
-
 }

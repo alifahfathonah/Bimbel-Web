@@ -102,9 +102,11 @@ class ExamController extends Controller
             $level = CourseLevel::find($sublevel->course_level_id);
 
             MarkedQuestion::where('report_id', $report->id)->delete();
+
             $report->status = 2;
             $report->finish_time = Carbon::now();
             $report->score = 100; //TODO: Add Get Score
+            $report->save();
 
             return redirect(route('tryout.level.index', ['id' => $level->id]));
         }
