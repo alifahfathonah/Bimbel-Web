@@ -14,31 +14,8 @@ use App\Models\Report;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\Rule;
 
-class TryoutController extends Controller
+class ExamController extends Controller
 {
-    public function dashboard()
-    {
-        return view('tryout.dashboard');
-    }
-
-    public function course_index()
-    {
-        $courses = Course::with('course_levels', 'course_levels.course_sublevels')->get();
-        return view('tryout.course', compact('courses'));
-    }
-
-    public function level_index($id)
-    {
-        $sublevels = CourseSublevel::where('course_level_id', '=', $id)->get();
-        return view('tryout.level', compact('sublevels'));
-    }
-
-    public function show_question(Request $request)
-    {
-        $this->validate($request, [
-            'sublevel_id' => 'required|exists:course_sublevels,id',
-        ]);
-    }
 
     public function start_exam(Request $request)
     {
@@ -49,7 +26,7 @@ class TryoutController extends Controller
         $report = $this->_createReports($request['sublevel_id']);
         $sublevel = CourseSublevel::where('id', $request['sublevel_id'])->first();
 
-        return $this->_show_exam($report, $sublevel);
+        return redirect(route('tryout.exam', ['report_id' => $report->id, 'number' => 1]));
     }
 
     public function show_exam(Request $request)
@@ -65,7 +42,8 @@ class TryoutController extends Controller
         $sublevel = CourseSublevel::where('id', $sublevel_id)->first();
 
         $this->validate($request, [
-            'number' => ['required',
+            'number' => [
+                'required',
                 Rule::exists('questions', 'number')
                     ->where(function ($query) use ($sublevel_id) {
                         $query->where('course_sublevel_id', $sublevel_id);
@@ -74,7 +52,6 @@ class TryoutController extends Controller
         ]);
 
         return $this->_show_exam($report, $sublevel, $request['number']);
-
     }
 
     public function mark_question(Request $request)
@@ -96,9 +73,9 @@ class TryoutController extends Controller
             ]
         ]);
         $mark = MarkedQuestion::where('report_id', $request['report_id'])
-                    ->where('number', $request['mark_number'])
-                    ->first();
-        if (!$mark){
+            ->where('number', $request['mark_number'])
+            ->first();
+        if (!$mark) {
             $mark = new MarkedQuestion;
             $mark->report_id = $report->id;
             $mark->number = $request['mark_number'];
@@ -108,6 +85,29 @@ class TryoutController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function submit_exam(Request $request)
+    {
+        $this->validate($request, [
+            'report_id' => 'required|exists:reports,id',
+        ]);
+
+        $report = Report::find($request['report_id']);
+
+        if (!$report){
+            return redirect()->back();
+        } else {
+            $sublevel = CourseSublevel::find($report->course_sublevel_id);
+            $level = CourseLevel::find($sublevel->course_level_id);
+
+            MarkedQuestion::where('report_id', $report->id)->delete();
+            $report->status = 2;
+            $report->finish_time = Carbon::now();
+            $report->score = 100; //TODO: Add Get Score
+
+            return redirect(route('tryout.level.index', ['id' => $level->id]));
+        }
     }
 
     private function _show_exam($report, $sublevel, $number = 1)
@@ -127,7 +127,6 @@ class TryoutController extends Controller
         $remaining_time = $this->_get_remaning_time($report, $sublevel);
 
         $question_numbers = $this->_get_question_numbers($sublevel_id, $report_id);
-        // dd($question_numbers);
         $question = $this->_get_question($sublevel_id, $current_number);
         $question['answers'] = $this->_get_answers($question->id);
 
@@ -194,25 +193,24 @@ class TryoutController extends Controller
     private function _get_question($sublevel_id, $number)
     {
         return Question::where('course_sublevel_id', '=', $sublevel_id)
-                ->where('number', $number)
-                ->first();
+            ->where('number', $number)
+            ->first();
     }
 
     private function _get_answers($question_id)
     {
         return MultipleChoiceAnswer::where('question_id', '=', $question_id)
-                ->orderBy('answer_order')
-                ->get();
+            ->orderBy('answer_order')
+            ->get();
     }
 
     private function _get_question_numbers($sublevel_id, $report_id)
     {
         return Question::where('course_sublevel_id', $sublevel_id)
-                ->with(['marked' => function ($query) use($report_id) {
-                    $query->where('report_id', $report_id);
-                }])
-                ->orderBy('number')
-                ->get(['id','number']);
+            ->with(['marked' => function ($query) use ($report_id) {
+                $query->where('report_id', $report_id);
+            }])
+            ->orderBy('number')
+            ->get(['id', 'number']);
     }
-
 }

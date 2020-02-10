@@ -50,7 +50,13 @@
                             <p class="card-text">{{ $sublevel['descrption'] }}</p>
                         </div>
                         <div class="card-footer">
-                            <a href="#" class="btn btn-primary float-right">Start</a>
+                            <form action="{{ route('tryout.exam.start') }}" method="post">
+                                @csrf
+                                <input type="hidden" name="sublevel_id" value="{{ $sublevel['id'] }}">
+                                <button type="submit" class="btn btn-primary float-right">
+                                    Start
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

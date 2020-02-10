@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,7 +14,6 @@
 |
 */
 
-use App\Http\Controllers\Tryout\CourseController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,6 +31,10 @@ Route::group(['prefix' => 'tryout'], function () {
 
         Route::get('/level/{id}', 'Tryout\TryoutController@level_index')->name('tryout.level.index');
         Route::get('/course', 'Tryout\TryoutController@course_index')->name('tryout.course.index');
+        Route::get('/mark', 'Tryout\ExamController@mark_question')->name('tryout.exam.mark');
+        Route::get('/exam', 'Tryout\ExamController@show_exam')->name('tryout.exam');
+        Route::post('/exam', 'Tryout\ExamController@start_exam')->name('tryout.exam.start');
+        Route::post('/submit', 'Tryout\ExamController@submit_exam')->name('tryout.exam.submit');
 
         Route::get('/logout', 'Tryout\AuthController@logout')->name('tryout.logout');
     });
