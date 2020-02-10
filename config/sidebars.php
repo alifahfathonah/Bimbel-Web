@@ -1,5 +1,90 @@
 <?php
 return [
+    /*
+        Students Sidebar
+    */
+
+    'admin_sidebar' => [
+        [
+            'title' => 'Dashboard',
+            'role' => '2',
+            'items' => [
+                [
+                    'title' => 'Dashboard',
+                    'url' => 'tryout/dashboard',
+                    'icon' => 'fas fa-fw fa-tachometer-alt',
+                    'role' => '2',
+                ],
+            ],
+        ],
+
+        [
+            'title' => 'Account',
+            'role' => '3',
+            'items' => [
+                [
+                    'title' => 'Profile',
+                    'url' => 'tryout/profile',
+                    'icon' => 'fa-fw far fa-address-card',
+                    'role' => '2',
+                ],
+            ]
+
+        ],
+
+        [
+            'title' => 'Users',
+            'role' => '1',
+            'items' => [
+                [
+                    'title' => 'Teachers',
+                    'url' => 'admin/users',
+                    'icon' => 'fa-fw fas fa-user-tie',
+                    'role' => '1',
+                ],
+
+                [
+                    'title' => 'Students',
+                    'url' => 'admin/students',
+                    'icon' => 'fa-fw fas fa-user-graduate',
+                    'role' => '2',
+                ],
+            ],
+        ],
+
+        [
+            'title' => 'Reports',
+            'role' => '1',
+            'items' => [
+                [
+                    'title' => 'Reports',
+                    'url' => 'admin/reports',
+                    'icon' => 'fa-fw fas fa-tasks',
+                    'role' => '1',
+                ],
+            ],
+        ],
+
+        [
+            'title' => 'Settings',
+            'role' => '1',
+            'items' => [
+                [
+                    'title' => 'Settings',
+                    'url' => 'admin/settings',
+                    'icon' => 'fa-fw fas fa-cog',
+                    'role' => '1',
+                ],
+            ],
+        ],
+    ],
+
+
+
+    /*
+        Students Sidebar
+    */
+
     'student_sidebar' => [
         [
             'title' => 'Dashboard',
