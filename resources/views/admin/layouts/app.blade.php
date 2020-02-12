@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -18,7 +16,7 @@
   <!-- Custom styles for this template-->
   <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
-  @yield('css')
+  @stack('css')
 
 </head>
 
@@ -27,7 +25,11 @@
   <!-- Page Wrapper -->
   <div id="wrapper">
 
-    @yield('wrapper-content')
+    @auth
+        @include('admin.layouts.main')
+    @else
+        @yield('content')
+    @endauth
 
   </div>
   <!-- End of Page Wrapper -->
@@ -42,7 +44,7 @@
   <!-- Custom scripts for all pages-->
   <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 
-  @yield('js')
+  @stack('js')
 
 </body>
 

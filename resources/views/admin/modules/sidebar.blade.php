@@ -1,19 +1,9 @@
-@php
-    $user = Auth::user();
-@endphp
 <!-- Sidebar -->
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-    <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" id="sidebarToggle">
-    <div class="sidebar-brand-icon">
-        <i class="text-white fas fa-bars"></i>
-    </div>
-    </a>
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled sticky-top" id="accordionSidebar" style="height: 100vh">
 
     @foreach (config('sidebars.admin_sidebar') as $heading)
 
-        @if (count($heading['items']) > 0 && $user->role <= intval($heading['role']))
+        @if (count($heading['items']) > 0 && get_user()->role <= intval($heading['role']))
             <!-- Heading -->
             <div class="sidebar-heading mb-1 mt-2">
                 {{ $heading['title'] }}

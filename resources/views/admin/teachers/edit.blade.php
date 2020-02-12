@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
 
-@section('title', 'New Students')
+@section('title', 'Edit Teacher Data')
 
 @section('content')
 
@@ -17,15 +17,19 @@
 
 <div class="row">
     <div class="col-md-8">
-        <form action="{{ route('admin.students.index') }}" method="post">
+        <form action="{{ route('admin.teachers.update', ['teacher' => $user['id']]) }}" method="post">
+            @method('PUT')
             <div class="card">
                 <div class="card-header">
-                    New Student
+                    {{ $user['name'] }}
                 </div>
                 <div class="card-body">
-
-                    @include('admin.students.student_form', ['except' => ['id']])
-
+                    @component('components.teacher_form', [
+                        'name' => $user['name'],
+                        'username' => $user['username'],
+                        'email' => $user['email'],
+                    ])
+                    @endcomponent
                 </div>
                 <div class="card-footer">
                     <button type="submit" class="btn btn-primary float-right">Submit</button>
@@ -34,4 +38,5 @@
         </form>
     </div>
 </div>
+
 @endsection

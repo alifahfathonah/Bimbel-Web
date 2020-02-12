@@ -2,19 +2,24 @@
 
 @section('title', 'Admin Login')
 
-@section('wrapper-content')
+@section('content')
+
 <div class="container-fluid primary-bg height-min" style="min-height: 100vh; background: rgba(84, 33, 224, .7);">
     <div class="row justify-content-center my-4">
+
         <div class="col-md-2 pr-0">
             <img src="{{ asset('img/icon.png') }}" alt="Icon" class="img-fluid">
         </div>
+
         <div class="col-md-5 d-flex flex-column text-white justify-content-center pl-0 align-items-start">
             <h1 style="font-size: 8rem">Manggis</h1>
             <h3 style="background: rgba(0, 0, 0, .3); border-radius: 5rem" class="px-3 py-1">
                 Matematika - Bahasa Inggris - Tahfidz
             </h3>
         </div>
+
     </div>
+
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card">

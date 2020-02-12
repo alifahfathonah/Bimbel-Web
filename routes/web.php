@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Route;
 
 // Route::get('/home', 'HomeController@index')->name('home');
 
+Route::redirect('/', 'admin/dashboard', 301)->name('home');
+
 Route::group(['prefix' => 'tryout'], function () {
     Route::get('/login', 'Tryout\AuthController@loginForm')->name('tryout.login');
     Route::post('/login', 'Tryout\AuthController@login')->name('tryout.post_login');
@@ -53,17 +55,12 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], fu
     });
 
     Route::group(['middleware' => 'auth'], function () {
-        Route::get   ('/dashboard',         'FrontController@dashboard')  ->name('dashboard');
-        Route::get   ('/profile',           'FrontController@profile')    ->name('profile');
 
-        Route::resource   ('/teachers',          'TeacherController');
+        Route::get('/dashboard','FrontController@dashboard')->name('dashboard');
+        Route::get('/profile','FrontController@profile')->name('profile');
 
-        Route::get   ('/students',          'StudentController@index')    ->name('student.index');
-        Route::delete('/students',          'StudentController@destroy')  ->name('student.destroy');
-        Route::post  ('/students',          'StudentController@store')    ->name('student.store');
-        Route::get   ('/students/create',   'StudentController@create')   ->name('student.create');
-        Route::post  ('/students/edit',     'StudentController@update')   ->name('student.update');
-        Route::get   ('/students/{id}',     'StudentController@edit')     ->name('student.edit');
+        Route::resource('/teachers', 'TeacherController');
+        Route::resource('/students','StudentController');
 
         Route::get('/reports', 'ReportController@index')->name('report.index');
 

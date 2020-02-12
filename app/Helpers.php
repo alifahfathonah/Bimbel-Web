@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 function getScoreGrade($score)
 {
@@ -22,7 +23,22 @@ function getTimeSpent($start, $finish)
     $finish = new Carbon($finish);
     return new Carbon($finish->diffInSeconds($start));
 }
+
 function toCarbon($datetime)
 {
     return new Carbon($datetime);
+}
+
+function get_user($guard = null)
+{
+    if ($guard && auth()->guard($guard)->check()){
+
+        return auth()->guard($guard)->user();
+
+    } else if (Auth::check()){
+
+        return Auth::user();
+
+    }
+    return null;
 }

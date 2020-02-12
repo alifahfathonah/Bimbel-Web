@@ -6,104 +6,130 @@ use App\Http\Controllers\Controller;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 
 class StudentController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $students = Student::all();
         return view('admin.students.index', compact('students'));
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        $statement = DB::select("SHOW TABLE STATUS LIKE 'students'");
-        $new_id = $statement[0]->Auto_increment;
-
-        return view('admin.students.create', compact('new_id'));
+        return view('admin.students.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|max:50|min:5',
-            'username' => 'required|max:50|min:5|unique:students,username',
-            'password_enable' => 'nullable',
-        ]);
+        $this->validateRequest();
+        $this->validateUsername();
 
         $student = new Student;
         $student->name = $request['name'];
         $student->username = $request['username'];
         $student->password = '12345678';
         $student->password_enable = isset($request['password_enable']) ? 1 : 0;
-
         $student->save();
-        return redirect(route('admin.student.index'))->with([
+
+        return redirect()->route('admin.students.index')->with([
             'status' => 'success',
             'message' => 'Add Student ' . $request['username'] . ' Successfull'
         ]);
-
-        return response()->json([]);
     }
 
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        $student = Student::find($id);
+        return view('admin.students.show', compact('student'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit($id)
     {
         $student = Student::find($id);
-
-        if (!$student){
-            return redirect(route('admin.student.index'));
-        }
-
-        $student['join'] = (new Carbon($student['created_at']))->toDayDateTimeString();
-
-        return view('admin.students.details', compact('student'));
+        return view('admin.students.edit', compact('student'));
     }
 
-    public function update(Request $request)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'id' => 'required|exists:students,id',
-        ]);
+        $this->validateRequest();
+        $this->validateUsername($id);
 
-        $user_id = $request['id'];
-
-        $this->validate($request, [
-            'name' => 'required|max:50|min:5',
-            'password_enable' => 'nullable',
-            'username' => [
-                'required', 'max:50', 'min:5',
-                Rule::unique('students')->ignore($user_id),
-            ],
-        ]);
-
-        $student = Student::find($user_id);
+        $student = Student::find($id);
         $student->name = $request['name'];
         $student->username = $request['username'];
         $student->password_enable = (isset($request['password_enable'])) ? 1 : 0;
-
         $student->save();
 
-        return redirect(route('admin.student.index'))->with([
+        return redirect()->route('admin.students.index')->with([
             'status' => 'success',
             'message' => 'Update Student ' . $student->username . ' Successfull'
         ]);
     }
 
-    public function destroy(Request $request)
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
     {
-        $this->validate($request, [
-            'id' => 'required|exists:students,id',
-        ]);
-
-        $student = Student::find($request['id']);
+        $student = Student::find($id);
         $student->delete();
 
-        return redirect()->back()->with([
+        return redirect()->route('admin.students.index')->with([
             'status' => 'success',
             'message' => "Delete $student->username Successfull"
         ]);
     }
+
+    /**
+     * Validate name
+     */
+    private function validateRequest()
+    {
+        return request()->validate([
+            'name' => 'required|min:3|max:50',
+        ]);
+    }
+
+    /**
+     * Validate password and password_confirmation
+     */
+    private function validatePassword()
+    {
+        return request()->validate([
+            'password' => 'required|min:5|max:50|confirmed',
+        ]);
+    }
+
+    /**
+     * Validate username
+     */
+    private function validateUsername($id = null)
+    {
+        $id = isset($id) ? (',' . $id) : '';
+
+        return request()->validate([
+            'username' => 'required|max:50|min:5|unique:students,username' . $id,
+        ]);
+    }
+
 
 }
