@@ -24,7 +24,7 @@ return [
             'items' => [
                 [
                     'title' => 'Profile',
-                    'url' => 'tryout/profile',
+                    'url' => 'admin/profile',
                     'icon' => 'fa-fw far fa-address-card',
                     'role' => '2',
                 ],
@@ -38,7 +38,7 @@ return [
             'items' => [
                 [
                     'title' => 'Teachers',
-                    'url' => 'admin/users',
+                    'url' => 'admin/teachers',
                     'icon' => 'fa-fw fas fa-user-tie',
                     'role' => '1',
                 ],

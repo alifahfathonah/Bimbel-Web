@@ -15,13 +15,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-Auth::routes();
+// Route::redirect('/', 'tryout/login', 200);
+// Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+// Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'tryout'], function () {
     Route::get('/login', 'Tryout\AuthController@loginForm')->name('tryout.login');
@@ -44,13 +45,29 @@ Route::group(['prefix' => 'tryout'], function () {
     });
 });
 
-Route::group(['prefix' => 'admin'], function () {
-    Route::get('/login', 'Admin\AuthController@loginForm')->name('admin.login');
-    Route::post('/login', 'Admin\AuthController@login')->name('admin.login.post');
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function () {
+
+    Route::group(['middleware' => ['guest']], function () {
+        Route::get('/login', 'AuthController@loginForm')->name('login');
+        Route::post('/login', 'AuthController@login')->name('login.post');
+    });
 
     Route::group(['middleware' => 'auth'], function () {
-        Route::get('/dashboard', 'Admin\FrontController@dashboard')->name('admin.dashboard');
-        Route::get('/logout', 'Admin\AuthController@logout')->name('admin.logout');
+        Route::get   ('/dashboard',         'FrontController@dashboard')  ->name('dashboard');
+        Route::get   ('/profile',           'FrontController@profile')    ->name('profile');
+
+        Route::resource   ('/teachers',          'TeacherController');
+
+        Route::get   ('/students',          'StudentController@index')    ->name('student.index');
+        Route::delete('/students',          'StudentController@destroy')  ->name('student.destroy');
+        Route::post  ('/students',          'StudentController@store')    ->name('student.store');
+        Route::get   ('/students/create',   'StudentController@create')   ->name('student.create');
+        Route::post  ('/students/edit',     'StudentController@update')   ->name('student.update');
+        Route::get   ('/students/{id}',     'StudentController@edit')     ->name('student.edit');
+
+        Route::get('/reports', 'ReportController@index')->name('report.index');
+
+        Route::get('/logout', 'AuthController@logout')->name('logout');
     });
 
 });

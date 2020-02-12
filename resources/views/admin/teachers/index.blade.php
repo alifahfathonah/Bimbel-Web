@@ -3,11 +3,95 @@
 @section('title', 'Dashboard')
 
 @section('content')
+<!-- Page Heading -->
+<div class="d-flex flex-row justify-content-between align-content-center my-3">
+    <h1 class="h3 mb-2 text-gray-800">Teachers</h1>
+    <a href="{{ route('admin.student.create') }}" class="btn btn-primary">New Teacher</a>
+</div>
 
-    <!-- Page Heading -->
-    <div class="row">
-        <h2 class="ml-3 text-gray-800">Teachers</h2>
+@if (session('status'))
+<div class="alert alert-success">
+    {{ session('message') }}
+</div>
+@endif
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Teachers List</h6>
     </div>
-
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Join At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Join At</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    @foreach ($teachers as $teacher)
+                    <tr>
+                        <td>{{ $teacher['id'] }}</td>
+                        <td>{{ $teacher['name'] }}</td>
+                        <td>{{ $teacher['username'] }}</td>
+                        <td>{{ $teacher['email'] }}</td>
+                        <td>{{ $teacher['user_role']['name'] }}</td>
+                        <td>{{ toCarbon($teacher['created_at'])->toDayDateTimeString() }}</td>
+                        <td>
+                            <div class="d-flex flex-row justify-content-center align-content-center">
+                                <a href="{{ route('admin.student.edit', ['id' => $teacher['id']]) }}" class="btn btn-primary btn-circle btn-sm mx-1"
+                                    data-toggle="tooltip" data-placement="bottom" title="Edit teacher">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form action="{{ route('admin.student.destroy', ['id' => $teacher['id']]) }}" method="post" class="mx-1">
+                                    @method('delete')
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-circle btn-sm" data-toggle="tooltip" data-placement="bottom"
+                                        title="Delete Student">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 @endsection
 
+@section('css')
+<!-- Custom styles for this page -->
+<link href="{{ asset('css/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+@endsection
+
+@section('js')
+<!-- Page level plugins -->
+<script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ asset('js/dataTables.bootstrap4.min.js') }}"></script>
+
+<script>
+    $(document).ready(function () {
+            $('#dataTable').DataTable();
+        } );
+</script>
+@endsection
