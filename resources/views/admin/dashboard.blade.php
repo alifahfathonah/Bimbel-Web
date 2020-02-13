@@ -6,11 +6,8 @@
 
 <!-- Page Heading -->
 <div class="row">
-    <h2 class="ml-3 text-gray-800">Dashboard</h2>
+    <h2 class="ml-3 mb-4 text-gray-800">Dashboard</h2>
 </div>
-
-Welcome {{ get_user()->name }}<br>
-<a href="{{ route('admin.logout') }}">Logout</a>
 
 <div class="row">
 
@@ -47,5 +44,20 @@ Welcome {{ get_user()->name }}<br>
     @endcomponent
 
 </div>
-@endsection
 
+<div class="row">
+    @component('components.pie_chart', [
+        'title' => 'Report Score Status',
+        'labels' => ['Report with Score Above Minimum', 'Report with Score Below Minimum'],
+        'colors' => ['#28a745', '#dc3545'],
+        'chart_data' => $chart_data,
+    ])
+
+    @endcomponent
+
+    @component('components.table')
+
+    @endcomponent
+</div>
+
+@endsection

@@ -1,7 +1,7 @@
 <?php
 return [
     /*
-        Students Sidebar
+        Admin Sidebar
     */
 
     'admin_sidebar' => [
@@ -11,25 +11,11 @@ return [
             'items' => [
                 [
                     'title' => 'Dashboard',
-                    'url' => 'tryout/dashboard',
+                    'route' => 'admin.dashboard',
                     'icon' => 'fas fa-fw fa-tachometer-alt',
                     'role' => '2',
                 ],
             ],
-        ],
-
-        [
-            'title' => 'Account',
-            'role' => '3',
-            'items' => [
-                [
-                    'title' => 'Profile',
-                    'url' => 'admin/profile',
-                    'icon' => 'fa-fw far fa-address-card',
-                    'role' => '2',
-                ],
-            ]
-
         ],
 
         [
@@ -38,18 +24,38 @@ return [
             'items' => [
                 [
                     'title' => 'Teachers',
-                    'url' => 'admin/teachers',
+                    'route' => 'admin.teachers.index',
                     'icon' => 'fa-fw fas fa-user-tie',
                     'role' => '1',
                 ],
 
                 [
                     'title' => 'Students',
-                    'url' => 'admin/students',
+                    'route' => 'admin.students.index',
                     'icon' => 'fa-fw fas fa-user-graduate',
                     'role' => '2',
                 ],
             ],
+        ],
+
+        [
+            'title' => 'Course',
+            'role' => '3',
+            'items' => [
+                [
+                    'title' => 'Levels',
+                    'route' => 'admin.levels.index',
+                    'icon' => 'fa-fw fas fa-layer-group',
+                    'role' => '2',
+                ],
+                [
+                    'title' => 'Exams',
+                    'route' => 'admin.exams.index',
+                    'icon' => 'fa-fw fas fa-pencil-alt',
+                    'role' => '2',
+                ],
+            ]
+
         ],
 
         [
@@ -58,7 +64,7 @@ return [
             'items' => [
                 [
                     'title' => 'Reports',
-                    'url' => 'admin/reports',
+                    'route' => 'admin.reports.index',
                     'icon' => 'fa-fw fas fa-tasks',
                     'role' => '1',
                 ],
@@ -71,7 +77,7 @@ return [
             'items' => [
                 [
                     'title' => 'Settings',
-                    'url' => 'admin/settings',
+                    'route' => 'admin.settings.index',
                     'icon' => 'fa-fw fas fa-cog',
                     'role' => '1',
                 ],

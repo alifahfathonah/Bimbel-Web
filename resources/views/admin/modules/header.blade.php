@@ -13,9 +13,11 @@
         <li class="nav-item dropdown no-arrow">
 
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                    {{ get_user()->name }}
-                </span>
+                <div class="d-none d-lg-inline text-right">
+                    <small class="text-gray-600 d-block">{{ get_user()->name }}</small>
+                    <small class="d-block">{{ get_user()->username }}</small>
+                </div>
+                <div class="topbar-divider d-none d-sm-block"></div>
                 <img class="img-profile rounded-circle" src="{{ asset('img/user.png') }}">
             </a>
 
@@ -26,11 +28,11 @@
                     <small>{{ get_user()->email }}</small>
                 </div>
                 <hr class="my-2">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{{ route('admin.profile', ['id'=>1]) }}">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                 </a>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{{ route('admin.settings.index') }}">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Settings
                 </a>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Report;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -52,8 +53,13 @@ class StudentController extends Controller
      */
     public function show($id)
     {
+        $reports = Report::where('student_id', $id)
+                    ->with(['student', 'sublevel'])
+                    ->get()
+                    ->toArray();
+
         $student = Student::find($id);
-        return view('admin.students.show', compact('student'));
+        return view('admin.students.show', compact('student', 'reports'));
     }
 
     /**

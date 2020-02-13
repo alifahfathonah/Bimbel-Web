@@ -14,8 +14,8 @@
 
             @foreach ($heading['items'] as $item)
                 <!-- Nav Item - Dashboard -->
-                <li class="nav-item">
-                    <a class="nav-link py-2" href="{{ url($item['url']) }}">
+                <li class="nav-item {{ set_active([$item['route']]) }}">
+                    <a class="nav-link py-2" href="{{ route($item['route']) }}">
                         <h5 class="align-middle m-0 {{ $item['icon'] }}"></h5>
                         <span class="align-middle">{{ $item['title'] }}</span>
                     </a>

@@ -19,7 +19,7 @@ class CreateCourseSublevelsTable extends Migration
             $table->string('title');
             $table->integer('time');
             $table->float('minimum_score');
-            $table->text('descrption');
+            $table->text('description');
             $table->timestamps();
         });
     }

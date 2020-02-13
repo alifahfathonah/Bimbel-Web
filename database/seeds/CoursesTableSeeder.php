@@ -1,6 +1,12 @@
 <?php
 
+use App\Models\Course;
+use App\Models\CourseLevel;
+use App\Models\CourseSublevel;
+use App\Models\MultipleChoiceAnswer;
+use App\Models\Question;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class CoursesTableSeeder extends Seeder
 {
@@ -11,10 +17,56 @@ class CoursesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::insert("INSERT INTO `courses`
-            (`title`) VALUES
-            ('Matematika'),
-            ('Bahasa Inggris');
-        ");
+        $faker = Faker::create();
+
+        $titles = ['Matematika', 'Bahasa Inggris', 'Tematik'];
+
+        foreach ($titles as $title) {
+
+            $course = new Course;
+            $course->title = $title;
+            $course->save();
+
+            for ($i = 0; $i < 10; $i++) {
+
+                $level = new CourseLevel;
+                $level->course_id = $course->id;
+                $level->title = 'Paket ' . toAlpha($i);
+                $level->save();
+
+                for ($j=0; $j < 20; $j++) {
+
+                    $sublevel = new CourseSublevel;
+                    $sublevel->course_level_id = $level->id;
+                    $sublevel->title = $level->title . $j;
+                    $sublevel->time = $faker->numberBetween(80, 120);
+                    $sublevel->minimum_score = $faker->numberBetween(50, 100);
+                    $sublevel->description = $faker->realText($maxNbChars = 200);
+                    $sublevel->save();
+
+                    for ($k = 1; $k <= 20; $k++) {
+
+                        $question = new Question;
+                        $question->course_sublevel_id = $sublevel->id;
+                        $question->number = $k;
+                        $question->type = 1;
+                        $question->media = null;
+                        $question->question = $faker->realText($maxNbChars = 80);
+                        $question->correct_answer = $faker->numberBetween($min = 1, $max = 4);
+                        $question->save();
+
+                        for ($l = 1; $l <= 4; $l++) {
+
+                            $answer = new MultipleChoiceAnswer;
+                            $answer->question_id = $question->id;
+                            $answer->answer_order = $l;
+                            $answer->answer = $faker->realText($maxNbChars = 30);
+                            $answer->save();
+
+                        }
+                    }
+                }
+            }
+        }
     }
 }

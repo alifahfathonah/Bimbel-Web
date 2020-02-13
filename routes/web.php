@@ -59,10 +59,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], fu
         Route::get('/dashboard','FrontController@dashboard')->name('dashboard');
         Route::get('/profile','FrontController@profile')->name('profile');
 
+        Route::get('/settings','SettingController@index')->name('settings.index');
+
         Route::resource('/teachers', 'TeacherController');
         Route::resource('/students','StudentController');
-
-        Route::get('/reports', 'ReportController@index')->name('report.index');
+        Route::resource('/reports', 'ReportController')
+        ->except(['create', 'store', 'edit', 'update', 'destroy']);
+        Route::resource('/levels','LevelController');
+        Route::resource('/exams','ExamController');
 
         Route::get('/logout', 'AuthController@logout')->name('logout');
     });
