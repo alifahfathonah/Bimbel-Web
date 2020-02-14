@@ -91,3 +91,8 @@ function set_active($uri, $output = 'active')
         }
     }
 }
+
+function is_active($uri, $segment = 2, $output = 'active')
+{
+    return request()->segment($segment) == $uri ? $output : '';
+}

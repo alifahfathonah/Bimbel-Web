@@ -1,55 +1,90 @@
 <?php
 return [
-    /*
-        Admin Sidebar
-    */
 
+    /** Admin Sidebar */
     'admin_sidebar' => [
+
+        /** Dashboard */
         [
-            'title' => 'Dashboard',
-            'role' => '2',
             'items' => [
                 [
                     'title' => 'Dashboard',
                     'route' => 'admin.dashboard',
                     'icon' => 'fas fa-fw fa-tachometer-alt',
+                    'uri' => 'dashboard',
                     'role' => '2',
                 ],
             ],
         ],
 
+        /** Users */
         [
             'title' => 'Users',
-            'role' => '1',
             'items' => [
                 [
                     'title' => 'Teachers',
-                    'route' => 'admin.teachers.index',
                     'icon' => 'fa-fw fas fa-user-tie',
+                    'uri' => 'teachers',
                     'role' => '1',
+                    'items' => [
+                        [
+                            'title' => 'General',
+                            'items' => [
+                                [
+                                    'title' => 'Teacher List',
+                                    'route' => 'admin.teachers.index',
+                                    'role' => '1',
+                                ],
+                                [
+                                    'title' => 'New Teacher',
+                                    'route' => 'admin.teachers.create',
+                                    'role' => '1',
+                                ],
+                            ]
+                        ]
+                    ],
                 ],
-
                 [
                     'title' => 'Students',
-                    'route' => 'admin.students.index',
                     'icon' => 'fa-fw fas fa-user-graduate',
-                    'role' => '2',
+                    'uri' => 'students',
+                    'role' => '1',
+                    'items' => [
+                        [
+                            'title' => 'General',
+                            'items' => [
+                                [
+                                    'title' => 'Student List',
+                                    'route' => 'admin.students.index',
+                                    'role' => '1',
+                                ],
+                                [
+                                    'title' => 'New Student',
+                                    'route' => 'admin.students.create',
+                                    'role' => '1',
+                                ],
+                            ]
+                        ]
+                    ],
                 ],
             ],
         ],
 
+        /** Course */
         [
             'title' => 'Course',
             'role' => '3',
             'items' => [
                 [
                     'title' => 'Levels',
+                    'uri' => 'levels',
                     'route' => 'admin.levels.index',
                     'icon' => 'fa-fw fas fa-layer-group',
                     'role' => '2',
                 ],
                 [
                     'title' => 'Exams',
+                    'uri' => 'exams',
                     'route' => 'admin.exams.index',
                     'icon' => 'fa-fw fas fa-pencil-alt',
                     'role' => '2',
@@ -58,12 +93,14 @@ return [
 
         ],
 
+        /** Reports */
         [
             'title' => 'Reports',
             'role' => '1',
             'items' => [
                 [
                     'title' => 'Reports',
+                    'uri' => 'reports',
                     'route' => 'admin.reports.index',
                     'icon' => 'fa-fw fas fa-tasks',
                     'role' => '1',
@@ -71,12 +108,14 @@ return [
             ],
         ],
 
+        /** Settings */
         [
             'title' => 'Settings',
             'role' => '1',
             'items' => [
                 [
                     'title' => 'Settings',
+                    'uri' => 'settings',
                     'route' => 'admin.settings.index',
                     'icon' => 'fa-fw fas fa-cog',
                     'role' => '1',
@@ -87,10 +126,7 @@ return [
 
 
 
-    /*
-        Students Sidebar
-    */
-
+    /** Students Sidebar */
     'student_sidebar' => [
         [
             'title' => 'Dashboard',
