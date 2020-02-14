@@ -6,10 +6,11 @@
 
 <!-- Page Heading -->
 <div class="row">
-    <h2 class="ml-3 mb-4 text-gray-800">Dashboard</h2>
+    <h2 class="ml-3 mb-0 text-gray-800">@yield('title')</h2>
 </div>
+<hr class="my-1">
 
-<div class="row">
+<div class="row mt-3">
 
     @component('components.custom_card', [
         'type' => 'primary',
@@ -28,9 +29,9 @@
     @endcomponent
 
     @component('components.custom_card', [
-        'type' => 'info',
-        'title' => 'Reports This Week',
-        'value' => "$report_count New Reports",
+        'type' => 'warning',
+        'title' => 'Reports',
+        'value' => "$report_count Reports",
         'icon' => 'fas fa-tasks',
     ])
     @endcomponent
@@ -45,17 +46,29 @@
 
 </div>
 
-<div class="row">
+<div class="row align-items-start">
+
+    @component('components.custom_card', [
+        'type' => 'warning',
+        'class' => 'col-md-9',
+    ])
+        <div class="col-12">
+            <div class="text-xl font-weight-bold text-warning text-uppercase my-1">Reports Today</div>
+            <hr>
+
+            @component('components.table',[
+                'colums' => [ 'Student Name','Course','Start Time','Time Spent','Status','Score','Action'],
+                ])
+            @endcomponent
+        </div>
+    @endcomponent
+
     @component('components.pie_chart', [
         'title' => 'Report Score Status',
         'labels' => ['Report with Score Above Minimum', 'Report with Score Below Minimum'],
         'colors' => ['#28a745', '#dc3545'],
         'chart_data' => $chart_data,
     ])
-
-    @endcomponent
-
-    @component('components.table')
 
     @endcomponent
 </div>

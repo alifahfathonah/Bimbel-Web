@@ -34,19 +34,19 @@
                 <td>{{ $teacher['user_role']['name'] }}</td>
                 <td>{{ toCarbon($teacher['created_at'])->toDayDateTimeString() }}</td>
                 <td>
-                    <div class="d-flex flex-row justify-content-center align-content-center">
+                    <div class="d-inline">
                         <a href="{{ route('admin.teachers.show', ['teacher' => $teacher['id']]) }}"
-                            class="btn btn-primary btn-circle btn-sm mx-1" data-toggle="tooltip" data-placement="bottom"
+                            class="btn btn-primary btn-circle btn-sm mb-1 d-inline-block" data-toggle="tooltip" data-placement="bottom"
                             title="Details">
                             <i class="fas fa-info"></i>
                         </a>
                         <a href="{{ route('admin.teachers.edit', ['teacher' => $teacher['id']]) }}"
-                            class="btn btn-primary btn-circle btn-sm mx-1" data-toggle="tooltip" data-placement="bottom"
+                            class="btn btn-primary btn-circle btn-sm mb-1 d-inline-block" data-toggle="tooltip" data-placement="bottom"
                             title="Edit">
                             <i class="fas fa-edit"></i>
                         </a>
                         <form action="{{ route('admin.teachers.destroy', ['teacher' => $teacher['id']]) }}" method="post"
-                            class="mx-1">
+                            class="mb-1 d-inline-block">
                             @method('delete')
                             @csrf
                             <button type="submit" class="btn btn-danger btn-circle btn-sm" data-toggle="tooltip"

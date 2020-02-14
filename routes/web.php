@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 // Route::get('/home', 'HomeController@index')->name('home');
 
-Route::redirect('/', 'admin/dashboard', 301)->name('home');
+// Route::redirect('/', 'admin/dashboard', 301)->name('home');
 
 Route::group(['prefix' => 'tryout'], function () {
     Route::get('/login', 'Tryout\AuthController@loginForm')->name('tryout.login');
@@ -65,7 +65,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], fu
         Route::resource('/students','StudentController');
         Route::resource('/reports', 'ReportController')
         ->except(['create', 'store', 'edit', 'update', 'destroy']);
-        Route::resource('/levels','LevelController');
+        Route::resource('/levels', 'LevelController');
+        Route::resource('/sublevels', 'SublevelController');
+        Route::resource('/courses', 'CourseController');
         Route::resource('/exams','ExamController');
 
         Route::get('/logout', 'AuthController@logout')->name('logout');

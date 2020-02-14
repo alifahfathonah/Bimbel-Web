@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
-use App\Models\CourseLevel;
 use Illuminate\Http\Request;
 
-class LevelController extends Controller
+class CourseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,7 @@ class LevelController extends Controller
      */
     public function index()
     {
-        $courses = Course::with('course_levels', 'course_levels.course_sublevels')->get();
-        return view('admin.levels.index', compact('courses'));
+        //
     }
 
     /**
@@ -39,16 +37,14 @@ class LevelController extends Controller
     public function store(Request $request)
     {
         $this->validateRequest();
-        $this->validateCourseID();
 
-        $level = new CourseLevel;
-        $level->title = $request['title'];
-        $level->course_id = $request['course_id'];
-        $level->save();
+        $course = new Course;
+        $course->title = $request['title'];
+        $course->save();
 
         return redirect()->route('admin.levels.index')->with([
             'status' => 'success',
-            'message' => "Add $level->title Successfull"
+            'message' => "Add $course->title Successfull"
         ]);
     }
 
@@ -85,13 +81,13 @@ class LevelController extends Controller
     {
         $this->validateRequest($id);
 
-        $level = CourseLevel::find($id);
-        $level->title = $request['title'];
-        $level->save();
+        $course = Course::find($id);
+        $course->title = $request['title'];
+        $course->save();
 
         return redirect()->route('admin.levels.index')->with([
             'status' => 'success',
-            'message' => "Update $level->title Successfull"
+            'message' => "Update $course->title Successfull"
         ]);
     }
 
@@ -103,26 +99,21 @@ class LevelController extends Controller
      */
     public function destroy($id)
     {
-        $level = CourseLevel::find($id);
-        $level->delete();
+        $course = Course::find($id);
+        $course->delete();
 
         return redirect()->route('admin.levels.index')->with([
             'status' => 'success',
-            'message' => "Delete $level->title Successfull"
+            'message' => "Delete $course->title Successfull"
         ]);
     }
 
-    public function validateRequest()
+    public function validateRequest($id = null)
     {
-        return request()->validate([
-            'title' => 'required|min:3|max:50',
-        ]);
-    }
+        $id = isset($id) ? (',' . $id) : '';
 
-    public function validateCourseID()
-    {
         return request()->validate([
-            'course_id' => 'required|exists:courses,id',
+            'title' => 'required|min:3|max:50|unique:courses,title' . $id,
         ]);
     }
 
