@@ -70,18 +70,11 @@ return [
             ],
         ],
 
-        /** Course */
+        /** Exams */
         [
-            'title' => 'Course',
+            'title' => 'Exams',
             'role' => '3',
             'items' => [
-                [
-                    'title' => 'Levels',
-                    'uri' => 'levels',
-                    'route' => 'admin.levels.index',
-                    'icon' => 'fa-fw fas fa-layer-group',
-                    'role' => '2',
-                ],
                 [
                     'title' => 'Exams',
                     'uri' => 'exams',
