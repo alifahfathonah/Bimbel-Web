@@ -27,14 +27,14 @@ class CoursesTableSeeder extends Seeder
             $course->title = $title;
             $course->save();
 
-            for ($i = 0; $i < 10; $i++) {
+            for ($i = 0; $i < $faker->numberBetween(5, 15); $i++) {
 
                 $level = new CourseLevel;
                 $level->course_id = $course->id;
                 $level->title = 'Paket ' . toAlpha($i);
                 $level->save();
 
-                for ($j=0; $j < 20; $j++) {
+                for ($j = 1; $j <= $faker->numberBetween(10, 30); $j++) {
 
                     $sublevel = new CourseSublevel;
                     $sublevel->course_level_id = $level->id;
@@ -44,7 +44,7 @@ class CoursesTableSeeder extends Seeder
                     $sublevel->description = $faker->realText($maxNbChars = 200);
                     $sublevel->save();
 
-                    for ($k = 1; $k <= 20; $k++) {
+                    for ($k = 1; $k <= $faker->numberBetween(15, 30); $k++) {
 
                         $question = new Question;
                         $question->course_sublevel_id = $sublevel->id;

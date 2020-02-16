@@ -20,15 +20,15 @@ class ReportsTableSeeder extends Seeder
         $student_count = Student::count();
         $sublevel_count = CourseSublevel::count();
 
-        for ($i=0; $i < 25; $i++) {
-            $date = $faker->dateTimeThisYear($max = 'now', $timezone = null);
-            $time = $faker->numberBetween($min = 10, $max = 80);
+        for ($i=0; $i < $faker->numberBetween(30, 100); $i++) {
+            $date = $faker->dateTimeThisMonth('now', $timezone = 'Asia/Jakarta');
+            $time = $faker->numberBetween(10, 80);
 
             $report = new Report;
-            $report->student_id = $faker->numberBetween($min = 1, $max = $student_count);
-            $report->course_sublevel_id = $faker->numberBetween($min = 1, $max = $sublevel_count);
-            $report->score = $faker->numberBetween($min = 0, $max = 100);
-            $report->status = $faker->numberBetween($min = 1, $max = 2);;
+            $report->student_id = $faker->numberBetween(1, $student_count);
+            $report->course_sublevel_id = $faker->numberBetween(1, $sublevel_count);
+            $report->score = $faker->numberBetween(0, 100);
+            $report->status = $faker->numberBetween(1, 2);;
             $report->created_at = $date;
             $report->finish_time = $report->status == 2 ? $date->add(new DateInterval('PT' . $time . 'M')) : null;
             $report->save();

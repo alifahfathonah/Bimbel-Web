@@ -23,7 +23,7 @@ class UsersTableSeeder extends Seeder
         $user->role = 1;
         $user->save();
 
-        for ($i = 1; $i < 20; $i++) {
+        for ($i = 1; $i < $faker->numberBetween(10, 25); $i++) {
             $user = new User;
             $user->name = $faker->name;
             $user->email = $faker->freeEmail;

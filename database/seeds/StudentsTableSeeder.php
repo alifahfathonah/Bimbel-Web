@@ -24,7 +24,7 @@ class StudentsTableSeeder extends Seeder
         $student->password_enable = 1;
         $student->save();
 
-        for ($i = 1; $i < 100; $i++) {
+        for ($i = 1; $i < $faker->numberBetween(80, 150); $i++) {
             $student = new Student;
             $student->name = $faker->name;
             $student->username = $faker->userName;
