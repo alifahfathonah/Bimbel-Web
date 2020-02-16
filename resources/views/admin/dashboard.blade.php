@@ -55,17 +55,13 @@
         <div class="col-12">
             <div class="text-xl font-weight-bold text-warning text-uppercase my-1">Reports Today</div>
             <hr>
-
-            @component('components.table',[
-                'colums' => [ 'Student Name','Course','Start Time','Time Spent','Status','Score','Action'],
-                ])
-            @endcomponent
+            @include('admin.reports.report_table', ['reports' => $reports_today])
         </div>
     @endcomponent
 
     @component('components.pie_chart', [
         'title' => 'Report Score Status',
-        'labels' => ['Report with Score Above Minimum', 'Report with Score Below Minimum'],
+        'labels' => ['Report with Score Above Min', 'Report with Score Below Min'],
         'colors' => ['#28a745', '#dc3545'],
         'chart_data' => $chart_data,
     ])
