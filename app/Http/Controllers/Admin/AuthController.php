@@ -11,15 +11,20 @@ class AuthController extends Controller
 {
     public function login(Request $request)
     {
-        $this->validate($request, [
+        $validator = $this->validate($request, [
             "username"     => "required|exists:users,username",
             "password"    => "required|min:4",
         ]);
 
-        if (Auth::attempt(['username' => $request['username'], 'password' => $request['password']])) {
+        // dd($validator);
+
+        $credentials = $request->only('username', 'password');
+
+        if (Auth::attempt($credentials)) {
             return redirect()->intended(route('admin.dashboard'));
         }
-        redirect()->back()->with(['error' => 'Email / Password Salah']);
+        return redirect()->route('admin.login')->withErrors(['password'=>['Wrong Password']])
+        ->withInput(['username' => $request['username']]);
     }
 
     public function loginForm()
