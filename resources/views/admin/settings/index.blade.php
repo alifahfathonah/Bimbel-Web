@@ -58,6 +58,17 @@
 
             <div class="d-block">
                 <div class="d-inline-block">
+                    <strong>Delete All Reports</strong>
+                    <p class="m-0">
+                        Delete all saved reports in database.
+                    </p>
+                </div>
+                <a href="#" class="d-inline-block btn btn-danger disabled px-4 float-right"><strong>Delete</strong></a>
+            </div>
+            <hr>
+
+            <div class="d-block">
+                <div class="d-inline-block">
                     <strong>Wipe Data</strong>
                     <p class="m-0">
                         Delete all students, teachers, admin, exams, and reports in database.
