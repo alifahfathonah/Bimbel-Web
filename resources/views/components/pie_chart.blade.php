@@ -12,7 +12,7 @@
             </div>
             <div class="text-center small">
                 @foreach ($labels as $label)
-                <span class="mr-2">
+                <span class="mr-2 d-block">
                     <i class="fas fa-circle" style="color: {{ $colors[$loop->index] }}"></i>
                     {{ $label }}
                 </span>
