@@ -65,10 +65,18 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], fu
         Route::resource('/students','StudentController');
         Route::resource('/reports', 'ReportController')
         ->except(['create', 'store', 'edit', 'update', 'destroy']);
-        Route::resource('/levels', 'LevelController');
-        Route::resource('/sublevels', 'SublevelController');
-        Route::resource('/courses', 'CourseController');
-        Route::resource('/exams','ExamController');
+
+        Route::resource('/levels', 'LevelController')->only(['store', 'update', 'destroy']);
+        Route::resource('/sublevels', 'SublevelController')->only(['store', 'update', 'destroy']);
+        Route::resource('/courses', 'CourseController')->only(['store', 'update', 'destroy']);
+
+        Route::group(['prefix' => 'exams', 'as' => 'exams.'], function () {
+            Route::get('/','ExamController@index')->name('index');
+            Route::get('/{level_id}','ExamController@level_show')->name('level.show');
+            Route::get('/{level_id}/create', 'ExamController@sublevel_create')->name('sublevel.create');
+            Route::get('/{level_id}/{sublevel_id}/edit', 'ExamController@sublevel_edit')->name('sublevel.edit');
+            Route::get('/{level_id}/{sublevel_id}/questions', 'ExamController@manage_question')->name('sublevel.questions');
+        });
 
         Route::get('/logout', 'AuthController@logout')->name('logout');
     });

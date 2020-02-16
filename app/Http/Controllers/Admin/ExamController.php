@@ -3,83 +3,49 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
+use App\Models\CourseLevel;
+use App\Models\CourseSublevel;
 use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        $courses = Course::with('course_levels', 'course_levels.course_sublevels')->get();
+        return view('admin.levels.index', compact('courses'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function level_show($level_id)
     {
-        //
+        $level = CourseLevel::find($level_id);
+        $course = Course::find($level->course_id);
+        $sublevels = CourseSublevel::where('course_level_id', $level_id)->get()->toArray();
+
+        return view('admin.levels.show', compact('course', 'level', 'sublevels'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function sublevel_create($level_id)
     {
-        //
+        $level = CourseLevel::find($level_id);
+        $course = Course::find($level->course_id);
+        return view('admin.levels.create', compact('level', 'course'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function sublevel_edit($level_id, $sublevel_id)
     {
-        //
+        $level = CourseLevel::find($level_id);
+        $course = Course::find($level->course_id);
+        $sublevel = CourseSublevel::find($sublevel_id);
+        return view('admin.levels.edit', compact('level', 'course', 'sublevel'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function manage_question($level_id, $sublevel_id)
     {
-        //
+        $sublevel = CourseSublevel::find($sublevel_id);
+        $level = CourseLevel::find($level_id);
+        $course = Course::find($level['course_id']);
+        return view('admin.levels.manage_question', compact('course', 'level', 'sublevel'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

@@ -88,7 +88,7 @@
                 @forelse ($course->course_levels as $level)
 
                 <div class="btn-group my-2 w-100 shadow-sm" role="group">
-                    <a href="{{ route('admin.levels.show', ['level'=>$level->id]) }}" class="btn btn-outline-success w-100 p-3">
+                    <a href="{{ route('admin.exams.level.show', ['level_id'=>$level->id]) }}" class="btn btn-outline-success w-100 p-3">
 
                         <span class="d-inline float-left"> {{ $level->title }}</span>
 
