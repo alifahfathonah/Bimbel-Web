@@ -16,7 +16,7 @@ $sublevel['time'] ?? '', 'prop' => 'min=0'])
 
 @slot('input')
     <textarea class="form-control" id="description" name="description" placeholder="Description"
-                rows=5>{{ old('description') ?? $sublevel['description']}}</textarea>
+                rows=5>{{ old('description') ?? $sublevel['description'] ?? ''}}</textarea>
 @endslot
 
 @endcomponent
