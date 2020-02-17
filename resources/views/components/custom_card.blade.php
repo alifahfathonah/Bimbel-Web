@@ -1,4 +1,3 @@
-<!-- Earnings (Monthly) Card Example -->
 <div class="{{ $class ?? 'col-xl-3 col-md-6 mb-4' }}">
     <div class="card border-left-{{ $type ?? '' }} shadow h-100 py-2">
         <div class="card-body">
