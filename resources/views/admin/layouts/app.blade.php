@@ -7,6 +7,9 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
+  <!-- CSRF Token -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+
   <title>@yield('title')</title>
 
   <!-- Custom fonts for this template-->

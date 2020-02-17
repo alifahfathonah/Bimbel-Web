@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\QuestionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +54,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], fu
         Route::get('/login', 'AuthController@loginForm')->name('login');
         Route::post('/login', 'AuthController@login')->name('login.post');
     });
+    Route::get('/questions/{sublevel_id}', 'QuestionController@index')->name('questions.index');
+    Route::resource('/questions', 'QuestionController')->except(['index', 'edit', 'create']);
 
     Route::group(['middleware' => 'auth'], function () {
 
