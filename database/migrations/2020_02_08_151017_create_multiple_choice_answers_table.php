@@ -16,8 +16,9 @@ class CreateMultipleChoiceAnswersTable extends Migration
         Schema::create('multiple_choice_answers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('question_id');
-            $table->integer('answer_order');
+            $table->smallInteger('order');
             $table->text('answer');
+            $table->boolean('is_correct')->default(false);
             $table->timestamps();
         });
     }

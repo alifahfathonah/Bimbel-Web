@@ -18,7 +18,7 @@ class CreateReportsTable extends Migration
             $table->bigInteger('student_id');
             $table->bigInteger('course_sublevel_id');
             $table->float('score')->nullable(true)->default(null);
-            $table->integer('status')->default(0);
+            $table->smallInteger('status')->default(0);
             $table->dateTime('finish_time')->nullable(true)->default(null);
             $table->timestamps();
         });

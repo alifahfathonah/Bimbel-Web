@@ -17,10 +17,9 @@ class CreateQuestionsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('course_sublevel_id');
             $table->integer('number');
-            $table->integer('type')->default(0);
+            $table->smallInteger('type')->default(0);
             $table->string('media')->nullable(true)->default(null);
             $table->longText('question');
-            $table->string('correct_answer');
             $table->timestamps();
         });
     }

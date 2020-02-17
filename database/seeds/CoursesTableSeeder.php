@@ -52,14 +52,15 @@ class CoursesTableSeeder extends Seeder
                         $question->type = 1;
                         $question->media = null;
                         $question->question = $faker->realText($maxNbChars = 80);
-                        $question->correct_answer = $faker->numberBetween($min = 1, $max = 4);
                         $question->save();
 
-                        for ($l = 1; $l <= 4; $l++) {
-
+                        $choice_count = $faker->numberBetween(3, 5);
+                        $choice_correct = $faker->numberBetween(1, $choice_count);
+                        for ($l = 1; $l <= $choice_count; $l++) {
                             $answer = new MultipleChoiceAnswer;
                             $answer->question_id = $question->id;
-                            $answer->answer_order = $l;
+                            $answer->order = $l;
+                            $answer->is_correct = ($l == $choice_correct);
                             $answer->answer = $faker->realText($maxNbChars = 30);
                             $answer->save();
 

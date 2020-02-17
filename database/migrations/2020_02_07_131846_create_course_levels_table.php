@@ -17,7 +17,7 @@ class CreateCourseLevelsTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
             $table->string('title');
-            $table->integer('course_id');
+            $table->bigInteger('course_id');
         });
     }
 
