@@ -15,73 +15,81 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Student Routes
+Route::group(['prefix' => 'tryout', 'as' => 'tryout.'], function () {
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+    // Login
+    Route::get('/login', 'Tryout\AuthController@loginForm')->name('login');
+    Route::post('/login', 'Tryout\AuthController@login')->name('login.post');
 
-// Route::redirect('/', 'tryout/login', 200);
-// Auth::routes();
-
-// Route::get('/home', 'HomeController@index')->name('home');
-
-// Route::redirect('/', 'admin/dashboard', 301)->name('home');
-
-Route::group(['prefix' => 'tryout'], function () {
-    Route::get('/login', 'Tryout\AuthController@loginForm')->name('tryout.login');
-    Route::post('/login', 'Tryout\AuthController@login')->name('tryout.post_login');
-
+    // Student Dashboard
     Route::group(['middleware' => 'student'], function () {
-        Route::get('/dashboard', 'Tryout\TryoutController@dashboard')->name('tryout.dashboard');
+        Route::get('/dashboard', 'Tryout\TryoutController@dashboard')->name('dashboard');
+        Route::get('/profile', 'Tryout\TryoutController@profile')->name('profile');
+        Route::get('/logout', 'Tryout\AuthController@logout')->name('logout');
 
-        Route::get('/level/{id}', 'Tryout\TryoutController@level_index')->name('tryout.level.index');
-        Route::get('/course', 'Tryout\TryoutController@course_index')->name('tryout.course.index');
+        // Exams
+        Route::group(['as' => 'exams.'], function () {
+            Route::get('/exam', 'Tryout\ExamController@index')->name('index');
+            Route::get('/exam/run', 'Tryout\ExamController@run')->name('run');
+            Route::get('/exam/{level_id}', 'Tryout\ExamController@show')->name('show');
+            Route::post('/exam/{level_id}/{sublevel_id}', 'Tryout\ExamController@start')->name('start');
 
-        Route::get('/profile', 'Tryout\TryoutController@profile')->name('tryout.account.profile');
+            //Exams API
+            Route::get('/exam/prepare', 'Api\Tryout\ExamController@getQuestions')->name('exams.prepare');
+            Route::get('/exam/mark', 'Api\Tryout\ExamController@mark')->name('exams.mark');
+            Route::get('/exam/answer', 'Api\Tryout\ExamController@answer')->name('exams.answer');
+            Route::post('/exam/submit', 'Api\Tryout\ExamController@submit')->name('exams.submit');
+        });
 
-        Route::get('/mark', 'Tryout\ExamController@mark_question')->name('tryout.exam.mark');
-        Route::get('/exam', 'Tryout\ExamController@show_exam')->name('tryout.exam');
-        Route::post('/exam', 'Tryout\ExamController@start_exam')->name('tryout.exam.start');
-        Route::post('/submit', 'Tryout\ExamController@submit_exam')->name('tryout.exam.submit');
-
-        Route::get('/logout', 'Tryout\AuthController@logout')->name('tryout.logout');
     });
 });
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], function () {
 
+// Admin Routes
+Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+
+    // Login
     Route::group(['middleware' => ['guest']], function () {
-        Route::get('/login', 'AuthController@loginForm')->name('login');
-        Route::post('/login', 'AuthController@login')->name('login.post');
+        Route::get('/login', 'Admin\AuthController@loginForm')->name('login');
+        Route::post('/login', 'Admin\AuthController@login')->name('login.post');
     });
-    Route::get('/questions/{sublevel_id}', 'QuestionController@index')->name('questions.index');
-    Route::resource('/questions', 'QuestionController')->except(['index', 'edit', 'create']);
 
+    // Manage Questions API
+    Route::get('/questions/{sublevel_id}', 'Admin\QuestionController@index')->name('questions.index');
+    Route::resource('/questions', 'Admin\QuestionController')->except(['index', 'edit', 'create']);
+
+    // Admin Dashboard
     Route::group(['middleware' => 'auth'], function () {
 
-        Route::get('/dashboard','FrontController@dashboard')->name('dashboard');
-        Route::get('/profile','FrontController@profile')->name('profile');
+        //Dashboard
+        Route::get('/dashboard','Admin\FrontController@dashboard')->name('dashboard');
+        Route::get('/profile','Admin\FrontController@profile')->name('profile');
 
-        Route::get('/settings','SettingController@index')->name('settings.index');
+        // Settings
+        Route::get('/settings','Admin\SettingController@index')->name('settings.index');
 
-        Route::resource('/teachers', 'TeacherController');
-        Route::resource('/students','StudentController');
-        Route::resource('/reports', 'ReportController')
-        ->except(['create', 'store', 'edit', 'update', 'destroy']);
+        // Manage Resources
+        Route::resource('/teachers', 'Admin\TeacherController');
+        Route::resource('/students','Admin\StudentController');
+        Route::resource('/reports', 'Admin\ReportController')->only(['index', 'show']);
 
-        Route::resource('/levels', 'LevelController')->only(['store', 'update', 'destroy']);
-        Route::resource('/sublevels', 'SublevelController')->only(['store', 'update', 'destroy']);
-        Route::resource('/courses', 'CourseController')->only(['store', 'update', 'destroy']);
+        // Manage Exams
+        Route::resource('/levels', 'Admin\LevelController')->only(['store', 'update', 'destroy']);
+        Route::resource('/sublevels', 'Admin\SublevelController')->only(['store', 'update', 'destroy']);
+        Route::resource('/courses', 'Admin\CourseController')->only(['store', 'update', 'destroy']);
 
+        // Manage Exams
         Route::group(['prefix' => 'exams', 'as' => 'exams.'], function () {
-            Route::get('/','ExamController@index')->name('index');
-            Route::get('/{level_id}','ExamController@level_show')->name('level.show');
-            Route::get('/{level_id}/create', 'ExamController@sublevel_create')->name('sublevel.create');
-            Route::get('/{level_id}/{sublevel_id}/edit', 'ExamController@sublevel_edit')->name('sublevel.edit');
-            Route::get('/{level_id}/{sublevel_id}/questions', 'ExamController@manage_question')->name('sublevel.questions');
+            Route::get('/','Admin\ExamController@index')->name('index');
+            Route::get('/{level_id}','Admin\ExamController@level_show')->name('level.show');
+            Route::get('/{level_id}/create', 'Admin\ExamController@sublevel_create')->name('sublevel.create');
+            Route::get('/{level_id}/{sublevel_id}/edit', 'Admin\ExamController@sublevel_edit')->name('sublevel.edit');
+            Route::get('/{level_id}/{sublevel_id}/questions', 'Admin\ExamController@manage_question')->name('sublevel.questions');
         });
 
-        Route::get('/logout', 'AuthController@logout')->name('logout');
+        // Logout
+        Route::get('/logout', 'Admin\AuthController@logout')->name('logout');
     });
 
 });
