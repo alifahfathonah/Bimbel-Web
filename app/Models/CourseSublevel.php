@@ -12,4 +12,12 @@ class CourseSublevel extends Model
     {
         return $this->belongsTo(CourseLevel::class, 'course_level_id');
     }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class, 'course_sublevel_id', 'id');
+    }
+
+
+
 }

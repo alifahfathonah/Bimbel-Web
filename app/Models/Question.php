@@ -13,8 +13,15 @@ class Question extends Model
         return $this->hasOne(MarkedQuestion::class, 'number', 'number');
     }
 
+    public function answer()
+    {
+        return $this->hasOne(StudentAnswer::class, 'question_id', 'id');
+    }
+
     public function choices()
     {
         return $this->hasMany(MultipleChoiceAnswer::class);
     }
+
+
 }
