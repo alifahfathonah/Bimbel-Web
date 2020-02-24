@@ -4,7 +4,7 @@
 ])
 
 <div class="col">
-    <h5 class="m-0">{{ $student['name'] }}</h5>
+    <h5 class="m-0">Student Details</h5>
     <hr>
     <div class="d-flex flex-row">
         <div class="d-flex flex-column">
