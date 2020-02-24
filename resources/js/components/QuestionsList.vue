@@ -1,5 +1,5 @@
 <template>
-    <div class="card border-left-info shadow h-100">
+    <div class="card shadow h-100">
         <div class="card-body">
             <div class="row align-items-center">
                 <div class="col-12">
@@ -35,11 +35,11 @@
 
                                     <h5 :class="'m-0'+[is_error(q_index) ? ' text-danger' : ' text-success ']">{{ 'Question ' + (q_index + 1) }}</h5>
                                 </a>
-                                <button class="btn btn-outline-info float-right mr-2 my-3" title="Move Up" @click="move_up_question(q_index)">
+                                <button class="btn btn-outline-info float-right mr-2 my-3" title="Move Up" @click="move_up_question(q_index)" :disabled="q_index == 0">
                                     <i class="fas fa-chevron-up"></i> Move Up
                                 </button>
 
-                                <button class="btn btn-outline-info float-right mr-2 my-3" title="Move Down" @click="move_down_question(q_index)">
+                                <button class="btn btn-outline-info float-right mr-2 my-3" title="Move Down" @click="move_down_question(q_index)" :disabled="q_index == questions.length - 1">
                                     <i class="fas fa-chevron-down"></i> Move Down
                                 </button>
 
@@ -52,9 +52,11 @@
                                 <div class="card-body">
                                     <textarea name="question" :id="'question'+q_index" rows="2" placeholder="Question" class="form-control w-100" v-model="question.question"></textarea>
                                     <div v-for="(choice, c_index) in question.choices" :key="c_index">
-                                        <div class="d-flex flex-row align-items-center my-2">
-                                            <input type="checkbox" name="is_correct" tabindex="-1" v-model="choice.is_correct">
-                                            <h5 class="my-0 mx-3">{{ toAlpha(c_index) }}</h5>
+                                        <div class="d-flex flex-row align-items-center my-2 ">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" :id="'is_correct-'+q_index+'-'+c_index" name="is_correct" tabindex="-1" v-model="choice.is_correct">
+                                                <label class="custom-control-label" :for="'is_correct-'+q_index+'-'+c_index">{{ toAlpha(c_index) }}</label>
+                                            </div>
                                             <textarea name="answer" :class="'ml-2 form-control flex-fill ' + (choice.is_correct ? 'is-valid' : 'is-invalid')" rows="1" v-model="choice.answer"></textarea>
                                             <button class="btn text-gray-500" title="Remove" @click="remove_choice(q_index, c_index)" tabindex="-1">
                                                 <i class="fas fa-trash-alt"></i>
@@ -97,12 +99,12 @@
             move_up_question(question_index){
                 if (question_index == 0) return
                 let rows = [this.questions[question_index-1], this.questions[question_index]]
-                this.questions.splice(question_index, 2, rows[1], rows[0] )
+                this.questions.splice(question_index-1, 2, rows[1], rows[0])
             },
             move_down_question(question_index){
                 if (question_index == this.questions.length - 1) return
                 let rows = [this.questions[question_index], this.questions[question_index+1]]
-                this.questions.splice(question_index, 2, rows[1], rows[0] )
+                this.questions.splice(question_index, 2, rows[1], rows[0])
             },
             add_choice(question_index){
                 if (this.questions[question_index].choices.length == 26) return
