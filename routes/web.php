@@ -26,20 +26,24 @@ Route::group(['prefix' => 'tryout', 'as' => 'tryout.'], function () {
     Route::group(['middleware' => 'student'], function () {
         Route::get('/dashboard', 'Tryout\TryoutController@dashboard')->name('dashboard');
         Route::get('/profile', 'Tryout\TryoutController@profile')->name('profile');
+        Route::put('/profile', 'Tryout\TryoutController@edit_profile')->name('profile.edit_profile');
+        Route::post('/profile/change_password', 'Tryout\TryoutController@change_password')->name('profile.change_password');
         Route::get('/logout', 'Tryout\AuthController@logout')->name('logout');
 
         // Exams
         Route::group(['as' => 'exams.'], function () {
+            //Exams API
+            Route::get('/exam/prepare', 'Api\Tryout\ExamController@prepare')->name('prepare');
+            Route::get('/exam/mark', 'Api\Tryout\ExamController@mark')->name('mark');
+            Route::get('/exam/answer', 'Api\Tryout\ExamController@answer')->name('answer');
+            Route::post('/exam/submit', 'Api\Tryout\ExamController@submit')->name('submit');
+
+
             Route::get('/exam', 'Tryout\ExamController@index')->name('index');
             Route::get('/exam/run', 'Tryout\ExamController@run')->name('run');
             Route::get('/exam/{level_id}', 'Tryout\ExamController@show')->name('show');
             Route::post('/exam/{level_id}/{sublevel_id}', 'Tryout\ExamController@start')->name('start');
 
-            //Exams API
-            Route::get('/exam/prepare', 'Api\Tryout\ExamController@getQuestions')->name('exams.prepare');
-            Route::get('/exam/mark', 'Api\Tryout\ExamController@mark')->name('exams.mark');
-            Route::get('/exam/answer', 'Api\Tryout\ExamController@answer')->name('exams.answer');
-            Route::post('/exam/submit', 'Api\Tryout\ExamController@submit')->name('exams.submit');
         });
 
     });

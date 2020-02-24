@@ -13,8 +13,6 @@ class StudentsTableSeeder extends Seeder
      */
     public function run()
     {
-        $password = bcrypt('admin');
-
         $faker = Faker::create();
 
         $student = new Student();

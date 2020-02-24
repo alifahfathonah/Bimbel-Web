@@ -3,81 +3,61 @@
 namespace App\Http\Controllers\Tryout;
 
 use App\Http\Controllers\Controller;
+use App\Models\Student;
+use finfo;
 use Illuminate\Http\Request;
-use App\Models\CourseSublevel;
-use App\Models\Course;
-use App\Models\CourseLevel;
-use App\Models\MarkedQuestion;
-use App\Models\MultipleChoiceAnswer;
-use App\Models\Question;
-use App\Models\Report;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
 
 class TryoutController extends Controller
 {
+    /** Show students dashboard */
     public function dashboard()
     {
         return view('tryout.dashboard');
     }
 
-    public function course_index()
-    {
-        $courses = Course::with('course_levels', 'course_levels.course_sublevels')->get();
-        return view('tryout.course', compact('courses'));
-    }
-
+    /** Show student profile */
     public function profile()
     {
-        $user = auth()->guard('student')->user();
+        $user = auth()->guard('student')->user()->toArray();
         return view('tryout.profile', compact('user'));
     }
 
-    public function level_index($id)
+    /** Edit user password enable */
+    public function edit_profile(Request $request)
     {
-        $student_id = auth()->guard('student')->user()->id;
-        $sublevels = DB::table('course_sublevels')
-                        ->where('course_level_id', $id)
-                        ->leftJoin('reports', function ($join) use ($student_id){
-                            $join->on('reports.course_sublevel_id', '=', 'course_sublevels.id')
-                                 ->where('reports.student_id', '=', $student_id);
-                        })
-                        ->select(
-                            'course_sublevels.id',
-                            'course_sublevels.course_level_id',
-                            'course_sublevels.title',
-                            'course_sublevels.time',
-                            'course_sublevels.minimum_score',
-                            'course_sublevels.descrption',
-                            'reports.id AS report_id',
-                            'reports.student_id',
-                            'reports.course_sublevel_id',
-                            'reports.score',
-                            'reports.status',
-                            'reports.finish_time',
-                            'reports.created_at',
-                        )
-                        ->get()
-                        ->toArray();
-        // dd($sublevels);
-        return view('tryout.level', compact('sublevels'));
+        $password_enable = isset($request['password_enable']) ? 1 : 0;
+        $user = auth()->guard('student')->user();
+        $user->password_enable = $password_enable;
+        $user->save();
 
+        return redirect()->route('tryout.profile')->with([
+            'status' => 'success',
+            'message' => 'Update Profile Successfull'
+        ]);
+    }
 
-        dd($sublevels);
-        $sublevels = CourseSublevel::where('course_level_id', '=', $id)->get();
+    /** Change password */
+    public function change_password(Request $request)
+    {
+        $this->validate($request, [
+            'old_password' => 'required|min:5|max:50',
+            'new_password' => 'required|min:5|max:50|confirmed'
+        ]);
 
-        $sublevel_ids = array();
-        foreach ($sublevels as $sublevel) {
-            array_push($sublevel_ids, $sublevel['id']);
+        $user = auth()->guard('student')->user();
+
+        if (Hash::check($request['old_password'], $user->password)){
+            $user->password = bcrypt($request['new_password']);
+            $user->save();
+
+            return redirect()->route('tryout.profile')->with([
+                'status' => 'success',
+                'message' => 'Change Password Successfull'
+            ]);
         }
 
+        return redirect()->route('tryout.profile')->withErrors(['old_password' => ['Wrong Password']]);
 
-        $reports = Report::where('student_id', $student_id)
-                    ->whereIn('id', $sublevel_ids)
-                    ->get();
-
-
-        return view('tryout.level', compact('sublevels'));
     }
 }
