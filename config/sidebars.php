@@ -126,18 +126,18 @@ return [
             'items' => [
                 [
                     'title' => 'Dashboard',
-                    'url' => 'tryout/dashboard',
+                    'route' => 'tryout.dashboard',
                     'icon' => 'fas fa-fw fa-tachometer-alt',
                 ],
             ],
         ],
         [
-            'title' => 'Course',
+            'title' => 'Exams',
             'items' => [
                 [
-                    'title' => 'Course',
-                    'url' => 'tryout/course',
-                    'icon' => 'fab fa-fw fa-leanpub',
+                    'title' => 'Exams',
+                    'route' => 'tryout.exams.index',
+                    'icon' => 'fa-fw fas fa-pencil-alt',
                 ],
             ],
         ],
@@ -146,17 +146,11 @@ return [
             'items'=> [
                 [
                     'title' => 'Profile',
-                    'url' => 'tryout/profile',
+                    'route' => 'tryout.profile',
                     'icon' => 'fas fa-fw fa-user'
                 ],
                 [
-                    'title' => 'Change Password',
-                    'url' => 'tryout/changepassword',
-                    'icon' => 'fas fa-fw fa-key'
-                ],
-                [
                     'title' => 'Logout',
-                    'url' => 'tryout/logout',
                     'icon' => 'fas fa-fw fa-sign-out-alt'
                 ],
             ]
