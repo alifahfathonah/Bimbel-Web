@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\CourseLevel;
 use App\Models\CourseSublevel;
-use Illuminate\Http\Request;
 
 class ExamController extends Controller
 {
+    /** Show all course with all levels */
     public function index()
     {
         $courses = Course::with('course_levels', 'course_levels.course_sublevels')->get();
         return view('admin.levels.index', compact('courses'));
     }
 
+    /** Show all sublevel in selected level */
     public function level_show($level_id)
     {
         $level = CourseLevel::find($level_id);
@@ -25,6 +26,7 @@ class ExamController extends Controller
         return view('admin.levels.show', compact('course', 'level', 'sublevels'));
     }
 
+    /** Show create sublevel Form */
     public function sublevel_create($level_id)
     {
         $level = CourseLevel::find($level_id);
@@ -32,6 +34,7 @@ class ExamController extends Controller
         return view('admin.levels.create', compact('level', 'course'));
     }
 
+    /** Show edit sublevel form */
     public function sublevel_edit($level_id, $sublevel_id)
     {
         $level = CourseLevel::find($level_id);
@@ -40,6 +43,7 @@ class ExamController extends Controller
         return view('admin.levels.edit', compact('level', 'course', 'sublevel'));
     }
 
+    /** Show manage questions page */
     public function manage_question($level_id, $sublevel_id)
     {
         $sublevel = CourseSublevel::find($sublevel_id);

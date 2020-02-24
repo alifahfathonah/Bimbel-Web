@@ -5,38 +5,33 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class TeacherController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    /** Display a listing of the resource. */
     public function index()
     {
         $teachers = User::all();
         return view('admin.teachers.index', compact('teachers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    /** Show the form for creating a new resource. */
     public function create()
     {
 
         return view('admin.teachers.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-    */
+    /** Store a newly created resource in storage. */
     public function store(Request $request)
     {
         $this->validateRequest();
         $this->validateUsername();
         $this->validatePassword();
 
-        $user = User::create(request()->all());
+        $user = request()->all();
+        $user['role'] = 3;
+        $user = User::create($user);
 
         return redirect()->route('admin.teachers.index')->with([
             'status' => 'success',
@@ -44,27 +39,21 @@ class TeacherController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    /** Display the specified resource. */
     public function show($id)
     {
         $user = User::find($id);
         return view('admin.teachers.show', compact('user'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    /** Show the form for editing the specified resource. */
     public function edit($id)
     {
         $user = User::find($id);
         return view('admin.teachers.edit', compact('user'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    /** Update the specified resource in storage. */
     public function update(Request $request, $id)
     {
         $this->validateUsername($id);
@@ -82,9 +71,7 @@ class TeacherController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    /** Remove the specified resource from storage. */
     public function destroy($id)
     {
         $user = User::find($id);
@@ -96,9 +83,7 @@ class TeacherController extends Controller
         ]);
     }
 
-    /**
-     * Validate name, email, and username (with unique username)
-     */
+    /** Validate name, email, and username (with unique username) */
     private function validateRequest()
     {
         return request()->validate([
@@ -107,9 +92,7 @@ class TeacherController extends Controller
         ]);
     }
 
-    /**
-     * Validate password and password_confirmation
-     */
+    /** Validate password and password_confirmation */
     private function validatePassword()
     {
         return request()->validate([
@@ -117,9 +100,7 @@ class TeacherController extends Controller
         ]);
     }
 
-    /**
-     * Validate username (with exeption id)
-     */
+    /** Validate username (with exeption id) */
     private function validateUsername($id = null)
     {
         if ($id){

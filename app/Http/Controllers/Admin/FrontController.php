@@ -7,13 +7,13 @@ use App\Models\CourseSublevel;
 use App\Models\Report;
 use App\Models\Student;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class FrontController extends Controller
 {
+    /** Show admin dashboard */
     public function dashboard()
     {
         $user_count = User::count();
@@ -42,6 +42,7 @@ class FrontController extends Controller
         ));
     }
 
+    /** Show user profile */
     public function profile()
     {
         $user = Auth::user();

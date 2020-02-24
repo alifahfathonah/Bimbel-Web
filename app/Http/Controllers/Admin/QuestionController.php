@@ -16,6 +16,7 @@ class QuestionController extends Controller
         $questions = Question::where('course_sublevel_id', $sublevel_id)->with('choices')->get()->toArray();
         return response()->json(['questions' => $questions]);
     }
+
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -56,30 +57,6 @@ class QuestionController extends Controller
         }
 
         return $request;
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function validateQuestion($question)
-    {
-    }
-
-    public function validateChoices($choices)
-    {
-
     }
 
 }

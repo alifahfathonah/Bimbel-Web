@@ -10,26 +10,20 @@ use Illuminate\Support\Carbon;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    /** Display a listing of the resource. */
     public function index()
     {
         $students = Student::all();
         return view('admin.students.index', compact('students'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    /** Show the form for creating a new resource. */
     public function create()
     {
         return view('admin.students.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    /** Store a newly created resource in storage. */
     public function store(Request $request)
     {
         $this->validateRequest();
@@ -48,9 +42,7 @@ class StudentController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    /** Display the specified resource. */
     public function show($id)
     {
         $reports = Report::where('student_id', $id)
@@ -62,18 +54,14 @@ class StudentController extends Controller
         return view('admin.students.show', compact('student', 'reports'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+    /** Show the form for editing the specified resource. */
     public function edit($id)
     {
         $student = Student::find($id);
         return view('admin.students.edit', compact('student'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    /** Update the specified resource in storage. */
     public function update(Request $request, $id)
     {
         $this->validateRequest();
@@ -91,9 +79,7 @@ class StudentController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    /** Remove the specified resource from storage. */
     public function destroy($id)
     {
         $student = Student::find($id);
@@ -105,9 +91,7 @@ class StudentController extends Controller
         ]);
     }
 
-    /**
-     * Validate name
-     */
+    /** Validate name */
     private function validateRequest()
     {
         return request()->validate([
@@ -115,9 +99,7 @@ class StudentController extends Controller
         ]);
     }
 
-    /**
-     * Validate password and password_confirmation
-     */
+    /** Validate password and password_confirmation */
     private function validatePassword()
     {
         return request()->validate([
@@ -125,9 +107,7 @@ class StudentController extends Controller
         ]);
     }
 
-    /**
-     * Validate username
-     */
+    /** Validate username */
     private function validateUsername($id = null)
     {
         $id = isset($id) ? (',' . $id) : '';
