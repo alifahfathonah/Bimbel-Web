@@ -17,7 +17,7 @@ class CreateStudentAnswersTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('report_id');
             $table->bigInteger('question_id');
-            $table->integer('multiplechoice_answer');
+            $table->integer('multiple_choice_answer_id');
             $table->text('answer')->nullable()->default(null);
             $table->timestamps();
         });

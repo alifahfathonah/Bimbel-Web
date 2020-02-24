@@ -1,40 +1,14 @@
-@extends('tryout.layouts.app')
-
-@section('wrapper-content')
-
 @include('tryout.modules.sidebar')
 
-<!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
-
-    <!-- Main Content -->
     <div id="content">
-
         @include('tryout.modules.header')
-
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
-
+        <div class="container-fluid" id="app">
             @yield('content')
-
         </div>
-        <!-- /.container-fluid -->
-
     </div>
-    <!-- End of Main Content -->
-
-    <!-- Footer -->
-    <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-                <span>Copyright &copy; {{ config('app.name') }} {{ now()->year }}</span>
-            </div>
-        </div>
-    </footer>
-    <!-- End of Footer -->
-
+    {{-- @include('tryout.modules.footer') --}}
 </div>
-<!-- End of Content Wrapper -->
 
 <!-- Logout Modal-->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -54,5 +28,3 @@
         </div>
     </div>
 </div>
-
-@endsection

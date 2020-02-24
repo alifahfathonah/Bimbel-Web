@@ -17,6 +17,7 @@ class CreateMarkedQuestionsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('report_id');
             $table->bigInteger('number');
+            $table->boolean('status');
             $table->timestamps();
         });
     }

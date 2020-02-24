@@ -7,11 +7,13 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    /** Show login page */
     public function loginForm()
     {
         return view('tryout.login');
     }
 
+    /** Proceed login request */
     public function login(Request $request)
     {
         $this->validate($request, [
@@ -24,9 +26,12 @@ class AuthController extends Controller
         if (auth()->guard('student')->attempt($auth)) {
             return redirect()->intended(route('tryout.dashboard'));
         }
-        redirect()->back()->with(['error' => 'Email / Password Salah']);
+        return back()
+                ->withErrors(['password' => ['Wrong Password']])
+                ->withInput(['username' => $request['username']]);
     }
 
+    /** Proceed logout request */
     public function logout()
     {
         auth()->guard('student')->logout();

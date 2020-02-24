@@ -15,11 +15,11 @@ class CreateCourseSublevelsTable extends Migration
     {
         Schema::create('course_sublevels', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('course_level_id');
+            $table->bigInteger('course_level_id');
             $table->string('title');
             $table->integer('time');
             $table->float('minimum_score');
-            $table->text('descrption');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

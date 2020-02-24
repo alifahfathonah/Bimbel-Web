@@ -1,77 +1,115 @@
 <?php
 return [
-    /*
-        Students Sidebar
-    */
 
+    /** Admin Sidebar */
     'admin_sidebar' => [
+
+        /** Dashboard */
         [
-            'title' => 'Dashboard',
-            'role' => '2',
             'items' => [
                 [
                     'title' => 'Dashboard',
-                    'url' => 'tryout/dashboard',
+                    'route' => 'admin.dashboard',
                     'icon' => 'fas fa-fw fa-tachometer-alt',
+                    'uri' => 'dashboard',
                     'role' => '2',
                 ],
             ],
         ],
 
+        /** Users */
         [
-            'title' => 'Account',
+            'title' => 'Users',
+            'items' => [
+                [
+                    'title' => 'Teachers',
+                    'icon' => 'fa-fw fas fa-user-tie',
+                    'uri' => 'teachers',
+                    'role' => '1',
+                    'items' => [
+                        [
+                            'title' => 'General',
+                            'items' => [
+                                [
+                                    'title' => 'Teacher List',
+                                    'route' => 'admin.teachers.index',
+                                    'role' => '1',
+                                ],
+                                [
+                                    'title' => 'New Teacher',
+                                    'route' => 'admin.teachers.create',
+                                    'role' => '1',
+                                ],
+                            ]
+                        ]
+                    ],
+                ],
+                [
+                    'title' => 'Students',
+                    'icon' => 'fa-fw fas fa-user-graduate',
+                    'uri' => 'students',
+                    'role' => '1',
+                    'items' => [
+                        [
+                            'title' => 'General',
+                            'items' => [
+                                [
+                                    'title' => 'Student List',
+                                    'route' => 'admin.students.index',
+                                    'role' => '1',
+                                ],
+                                [
+                                    'title' => 'New Student',
+                                    'route' => 'admin.students.create',
+                                    'role' => '1',
+                                ],
+                            ]
+                        ]
+                    ],
+                ],
+            ],
+        ],
+
+        /** Exams */
+        [
+            'title' => 'Exams',
             'role' => '3',
             'items' => [
                 [
-                    'title' => 'Profile',
-                    'url' => 'tryout/profile',
-                    'icon' => 'fa-fw far fa-address-card',
+                    'title' => 'Exams',
+                    'uri' => 'exams',
+                    'route' => 'admin.exams.index',
+                    'icon' => 'fa-fw fas fa-pencil-alt',
                     'role' => '2',
                 ],
             ]
 
         ],
 
-        [
-            'title' => 'Users',
-            'role' => '1',
-            'items' => [
-                [
-                    'title' => 'Teachers',
-                    'url' => 'admin/users',
-                    'icon' => 'fa-fw fas fa-user-tie',
-                    'role' => '1',
-                ],
-
-                [
-                    'title' => 'Students',
-                    'url' => 'admin/students',
-                    'icon' => 'fa-fw fas fa-user-graduate',
-                    'role' => '2',
-                ],
-            ],
-        ],
-
+        /** Reports */
         [
             'title' => 'Reports',
             'role' => '1',
             'items' => [
                 [
                     'title' => 'Reports',
-                    'url' => 'admin/reports',
+                    'uri' => 'reports',
+                    'route' => 'admin.reports.index',
                     'icon' => 'fa-fw fas fa-tasks',
                     'role' => '1',
                 ],
             ],
         ],
 
+        /** Settings */
         [
             'title' => 'Settings',
             'role' => '1',
             'items' => [
                 [
                     'title' => 'Settings',
-                    'url' => 'admin/settings',
+                    'uri' => 'settings',
+                    'route' => 'admin.settings.index',
                     'icon' => 'fa-fw fas fa-cog',
                     'role' => '1',
                 ],
@@ -81,28 +119,25 @@ return [
 
 
 
-    /*
-        Students Sidebar
-    */
-
+    /** Students Sidebar */
     'student_sidebar' => [
         [
             'title' => 'Dashboard',
             'items' => [
                 [
                     'title' => 'Dashboard',
-                    'url' => 'tryout/dashboard',
+                    'route' => 'tryout.dashboard',
                     'icon' => 'fas fa-fw fa-tachometer-alt',
                 ],
             ],
         ],
         [
-            'title' => 'Course',
+            'title' => 'Exams',
             'items' => [
                 [
-                    'title' => 'Course',
-                    'url' => 'tryout/course',
-                    'icon' => 'fab fa-fw fa-leanpub',
+                    'title' => 'Exams',
+                    'route' => 'tryout.exams.index',
+                    'icon' => 'fa-fw fas fa-pencil-alt',
                 ],
             ],
         ],
@@ -111,17 +146,11 @@ return [
             'items'=> [
                 [
                     'title' => 'Profile',
-                    'url' => 'tryout/profile',
+                    'route' => 'tryout.profile',
                     'icon' => 'fas fa-fw fa-user'
                 ],
                 [
-                    'title' => 'Change Password',
-                    'url' => 'tryout/changepassword',
-                    'icon' => 'fas fa-fw fa-key'
-                ],
-                [
                     'title' => 'Logout',
-                    'url' => 'tryout/logout',
                     'icon' => 'fas fa-fw fa-sign-out-alt'
                 ],
             ]

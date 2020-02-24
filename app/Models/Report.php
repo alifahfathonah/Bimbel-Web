@@ -6,5 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Report extends Model
 {
-    //
+    public function student()
+    {
+        return $this->belongsTo(Student::class, 'student_id');
+    }
+
+    public function sublevel()
+    {
+        return $this->belongsTo(CourseSublevel::class, 'course_sublevel_id');
+    }
 }

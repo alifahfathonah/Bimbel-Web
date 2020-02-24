@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class UsersTableSeeder extends Seeder
 {
@@ -12,6 +13,8 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
+        $faker = Faker::create();
+
         $user = new User;
         $user->name = 'Administrator';
         $user->email = 'admin@manggis.com';
@@ -20,20 +23,14 @@ class UsersTableSeeder extends Seeder
         $user->role = 1;
         $user->save();
 
-        $user = new User;
-        $user->name = 'Admin';
-        $user->email = 'admin1@manggis.com';
-        $user->username = 'admin1';
-        $user->password = bcrypt('admin1');
-        $user->role = 2;
-        $user->save();
-
-        $user = new User;
-        $user->name = 'Teacher';
-        $user->email = 'teacher@manggis.com';
-        $user->username = 'teacher';
-        $user->password = bcrypt('teacher');
-        $user->role = 3;
-        $user->save();
+        for ($i = 1; $i < $faker->numberBetween(10, 25); $i++) {
+            $user = new User;
+            $user->name = $faker->name;
+            $user->email = $faker->freeEmail;
+            $user->username = $faker->userName;
+            $user->password = bcrypt('admin');
+            $user->role = $faker->numberBetween($min = 2, $max = 3);
+            $user->save();
+        }
     }
 }

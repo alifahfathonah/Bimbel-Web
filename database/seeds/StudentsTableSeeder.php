@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Student;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class StudentsTableSeeder extends Seeder
 {
@@ -11,12 +13,23 @@ class StudentsTableSeeder extends Seeder
      */
     public function run()
     {
-        $password = bcrypt('admin');
+        $faker = Faker::create();
 
-        DB::insert("INSERT INTO `students`
-            (`id`, `name`, `username`, `password`, `password_enable`, `created_at`, `updated_at`) VALUES
-            ('1',  'Admin', 'admin', '$password', '1', '2019-12-28 13:25:30', NULL);
-        ");
+        $student = new Student();
+        $student->name = 'Administrator';
+        $student->username = 'admin';
+        $student->password = bcrypt('admin');
+        $student->password_enable = 1;
+        $student->save();
+
+        for ($i = 1; $i < $faker->numberBetween(80, 150); $i++) {
+            $student = new Student;
+            $student->name = $faker->name;
+            $student->username = $faker->userName;
+            $student->password = bcrypt('admin');
+            $student->password_enable = $faker->numberBetween($min = 0, $max = 1);
+            $student->save();
+        }
     }
 
 }
